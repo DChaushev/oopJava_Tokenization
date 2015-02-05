@@ -30,12 +30,12 @@ public class TokenGeneratorTest {
     }
 
     @Test
-    public void testTokenGenerator(){
+    public void testTokenGenerator() {
         assertTrue(checkToken(cardNumber1, TokenGenerator.generateToken(cardNumber1)));
         assertTrue(checkToken(cardNumber2, TokenGenerator.generateToken(cardNumber2)));
         assertTrue(checkToken(cardNumber3, TokenGenerator.generateToken(cardNumber3)));
     }
-    
+
     private boolean checkToken(String cardNumber, String token) {
         if (cardNumber.length() != token.length()) {
             return false;

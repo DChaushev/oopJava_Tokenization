@@ -19,7 +19,7 @@ public class TokenGenerator {
 
         int digit;
         int firstDigitPos; // will be used if the sum % 10 == 0. Then we'll set 
-                           // as first digit the next one from the allowedFirstDigits.
+        // as first digit the next one from the allowedFirstDigits.
         int[] allowedFirstDigits = {1, 2, 7, 8, 9};
         int[] result = new int[cardNumber.length()];
         int sum = 0;
@@ -52,7 +52,7 @@ public class TokenGenerator {
         for (int i = 0; i < result.length; i++) {
             res.append(result[i]);
         }
-        
+
         return res.toString();
     }
 }

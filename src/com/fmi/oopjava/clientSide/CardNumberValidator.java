@@ -11,9 +11,11 @@ package com.fmi.oopjava.clientSide;
  */
 public class CardNumberValidator {
 
+    private static final char[] validStartingDigits = {'3', '4', '5', '6'};
+
     public static boolean isValid(String cardNumber) {
 
-        if (cardNumber == null || cardNumber.equals("")) {
+        if (cardNumber == null || cardNumber.equals("") || !isValidFistDigit(cardNumber)) {
             return false;
         }
 
@@ -31,6 +33,15 @@ public class CardNumberValidator {
             }
         }
         return (s1 + s2) % 10 == 0;
+    }
+
+    private static boolean isValidFistDigit(String cardNumber) {
+        for (int i = 0; i < validStartingDigits.length; i++) {
+            if (cardNumber.charAt(0) == validStartingDigits[i]) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

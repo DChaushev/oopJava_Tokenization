@@ -34,14 +34,14 @@ public class TokenGenerator {
 
             do {
                 digit = random.nextInt(10);
-            } while (digit == cardNumber.charAt(i) - (int) '0');
+            } while (digit == Character.digit(cardNumber.charAt(i), 10));
             result[i] = digit;
             sum += digit;
         }
         // set the last 4 digits (they must be the same as the card's
         for (int i = cardNumber.length() - 4; i < cardNumber.length(); i++) {
-            result[i] = cardNumber.charAt(i) - (int) '0';
-            sum += cardNumber.charAt(i) - (int) '0';
+            result[i] =  Character.digit(cardNumber.charAt(i), 10);
+            sum += result[i];
         }
         // if the sum is divisable by 10, we change the first digit
         if (sum % 10 == 0) {

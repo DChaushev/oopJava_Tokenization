@@ -65,12 +65,8 @@ public class TokenGeneratorTest {
 
         int sum = 0;
         for (int i = 0; i < token.length(); i++) {
-            sum += token.charAt(i) - (int) '0';
+            sum += Character.digit(token.charAt(i), 10);
         }
-        if (sum % 10 == 0) {
-            return false;
-        }
-
-        return true;
+        return sum % 10 != 0;
     }
 }

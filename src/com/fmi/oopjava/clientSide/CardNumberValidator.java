@@ -15,7 +15,7 @@ public class CardNumberValidator {
 
     public static boolean isValid(String cardNumber) {
 
-        if (cardNumber == null || cardNumber.equals("") || !isValidFistDigit(cardNumber)) {
+        if (cardNumber == null || cardNumber.equals("") || !isValidFirstDigit(cardNumber)) {
             return false;
         }
 
@@ -35,7 +35,7 @@ public class CardNumberValidator {
         return (s1 + s2) % 10 == 0;
     }
 
-    private static boolean isValidFistDigit(String cardNumber) {
+    private static boolean isValidFirstDigit(String cardNumber) {
         for (int i = 0; i < validStartingDigits.length; i++) {
             if (cardNumber.charAt(0) == validStartingDigits[i]) {
                 return true;

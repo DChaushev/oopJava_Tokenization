@@ -37,7 +37,7 @@ Token: 1234243434269991<br/>
 
 <b>The client GUI must provide the following interface:</b>
 <ul>
-<li><del>Open socket to the server, sending the username and password (Swing interface).</del></li>
+<li><del>Open socket to the server,</del> sending the username and password (Swing interface).</li>
 <li>Options for registering token and receiving the card number by given token.</li>
 <li>Correctly visualize results and errors.</li>
 <li>The user input must be validated with regular expressions.</li>

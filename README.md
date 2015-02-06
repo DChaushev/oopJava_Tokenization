@@ -3,7 +3,7 @@ Project that I'm making for elective course "OOP with Java" at the university.
 
 Descripton:
 -----------
-Tokenization of bank cards with multithreaded server and graphical interface.
+Tokenization of bank cards with RMI and graphical interface.
 
 Must implement tokenization that from given card number returns a token.<br/>
 For example:<br/>
@@ -25,7 +25,7 @@ Token: 1234243434269991<br/>
 <li>The client can see his card number with the token. Error if no such token is registered.</li>
 </ul>
 
-<b>The server must implement multithreaded server-client application with GUI:</b>
+<b>The server must implement RMI application with GUI:</b>
 <ul>
 <li>Conservation card number <=> token relationships in XML serialization.</li>
 <li>Conservation of clients information (username and password) and their rights in XML serialization.</li>
@@ -37,7 +37,7 @@ Token: 1234243434269991<br/>
 
 <b>The client GUI must provide the following interface:</b>
 <ul>
-<li>Open socket to the server, sending the username and password (Swing interface).</li>
+<li><del>Open socket to the server, sending the username and password (Swing interface).</del></li>
 <li>Options for registering token and receiving the card number by given token.</li>
 <li>Correctly visualize results and errors.</li>
 <li>The user input must be validated with regular expressions.</li>

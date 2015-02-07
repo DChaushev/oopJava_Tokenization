@@ -12,8 +12,10 @@ import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -26,8 +28,10 @@ public class Server
     private final Map<String, String> tokenMap;
     private final Map<String, Client> clientMap;
     private final Map<String, List<String>> cardToTokensMap;
+    private final Set<String> allTokens;
 
     public Server() throws RemoteException {
+        allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
         clientMap = new TreeMap<>();
         cardToTokensMap = new TreeMap<>();
@@ -47,9 +51,18 @@ public class Server
 
     @Override
     public String generateToken(String cardNumber) {
-        String token = TokenGenerator.generateToken(cardNumber);
+        String token;
+        boolean check = false;
+        do {
+            token = TokenGenerator.generateToken(cardNumber);
+            if (!allTokens.contains(token)) {
+                check = true;
+            }
+        } while (!check);
+        allTokens.add(token);
+
         tokenMap.put(token, cardNumber);
-        if(!cardToTokensMap.containsKey(cardNumber)){
+        if (!cardToTokensMap.containsKey(cardNumber)) {
             cardToTokensMap.put(cardNumber, new ArrayList<>());
         }
         cardToTokensMap.get(cardNumber).add(token);
@@ -67,12 +80,12 @@ public class Server
     @Override
     public String getAllTokens(String cardNumber) throws RemoteException {
         StringBuilder result;
-        if(cardToTokensMap.containsKey(cardNumber)){
+        if (cardToTokensMap.containsKey(cardNumber)) {
             result = new StringBuilder();
             List tokens = cardToTokensMap.get(cardNumber);
-            for (Object token : tokens) {
+            tokens.stream().forEach((token) -> {
                 result.append(String.format("%s\n", token));
-            }
+            });
             return result.toString();
         }
         return null;

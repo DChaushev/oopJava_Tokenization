@@ -35,8 +35,8 @@ public class Server
         tokenMap = new TreeMap<>();
         clientMap = new TreeMap<>();
         cardToTokensMap = new TreeMap<>();
-        clientMap.put("mitko", new Client("Dimitar", "mitko", new char[]{'1', '2', '3', '4'}));
-        clientMap.put("ivan", new Client("Ivan", "ivan", new char[]{'1', '2', '3', '4'}));
+        clientMap.put("mitko", new Client("Dimitar", "mitko", new char[]{'1', '2', '3', '4', 'a', 'a'}));
+        clientMap.put("ivan", new Client("Ivan", "ivan", new char[]{'1', '2', '3', '4', 'a', 'a'}));
     }
 
     @Override
@@ -89,6 +89,11 @@ public class Server
             return result.toString();
         }
         return null;
+    }
+
+    @Override
+    public boolean isUp() throws RemoteException {
+        return true;
     }
 
 }

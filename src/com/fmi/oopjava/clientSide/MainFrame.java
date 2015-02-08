@@ -10,6 +10,10 @@ import javax.swing.JPanel;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private static void connectToServer() {
+        server = new ServerConnector();
+    }
+
     /**
      * Creates new form MainFrame
      */
@@ -77,7 +81,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        server = new ServerConnector();
+        connectToServer();
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -119,6 +123,7 @@ public class MainFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     RemoteServer getServer() {
+        connectToServer();
         return server;
     }
 }

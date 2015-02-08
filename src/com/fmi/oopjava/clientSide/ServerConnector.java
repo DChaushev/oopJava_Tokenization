@@ -31,9 +31,15 @@ public class ServerConnector implements RemoteServer {
 
         } catch (RemoteException | NotBoundException ex) {
             ex.printStackTrace();
+            
         }
     }
 
+    @Override
+    public boolean isUp(){
+        return server != null;
+    }
+    
     @Override
     public Client validateCredentials(String username, char[] password) throws RemoteException {
         return server.validateCredentials(username, password);

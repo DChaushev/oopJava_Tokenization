@@ -120,15 +120,27 @@ public class LoginPanel extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void validateCredentials() throws RemoteException {
-        String username = txtUsername.getText();
-        char[] password = txtPassword.getPassword();
 
         frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
         server = frame.getServer();
-        if (server == null) {
+        if (!server.isUp()) {
             lblNotification.setText("No connection to the server! Please try again later!");
             return;
         }
+
+        String username = txtUsername.getText();
+        char[] password = txtPassword.getPassword();
+
+        if (!username.matches("[a-z0-9_]{3,16}")) {
+            lblNotification.setText("Invalid username format!");
+            return;
+        }
+        String pswd = new String(password);
+        if (!pswd.matches("((?=.*\\d)(?=.*[a-z]).{6,20})")) {
+            lblNotification.setText("Invalid password format!");
+            return;
+        }
+
         Client c = server.validateCredentials(username, password);
         if (c != null) {
             TokenizationPanel tp = new TokenizationPanel();

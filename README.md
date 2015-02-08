@@ -1,5 +1,7 @@
 # oopJava_Tokenization
 Project that I'm making for elective course "OOP with Java" at the university.
+The theme of the project is below. It is provided by the teacher.
+It is not very clear what exactly should be done, so I guess I'll be using my imagination...
 
 Descripton:
 -----------

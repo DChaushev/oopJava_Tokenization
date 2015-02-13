@@ -8,7 +8,7 @@ package com.fmi.oopjava.serverSide;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.remoteInterface.RemoteServer;
 import com.fmi.oopjava.tokenGenerator.TokenGenerator;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
+import com.fmi.oopjava.xmlSerializor.ClientsStorer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -26,24 +26,25 @@ public class Server
         extends UnicastRemoteObject implements RemoteServer {
 
     private final Map<String, String> tokenMap;
-    private final Map<String, Client> clientMap;
     private final Map<String, List<String>> cardToTokensMap;
     private final Set<String> allTokens;
 
     public Server() throws RemoteException {
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
-        clientMap = new TreeMap<>();
         cardToTokensMap = new TreeMap<>();
-        clientMap.put("mitko", new Client("Dimitar", "mitko", new char[]{'1', '2', '3', '4', 'a', 'a'}));
-        clientMap.put("ivan", new Client("Ivan", "ivan", new char[]{'1', '2', '3', '4', 'a', 'a'}));
     }
 
     @Override
     public Client validateCredentials(String username, char[] password) {
-        if (clientMap.containsKey(username)) {
-            if (clientMap.get(username).checkPassword(password)) {
-                return clientMap.get(username);
+
+        if (ClientsStorer.clientExists(username)) {
+            Client client = (Client) ClientsStorer.readClient(username);
+            if(client == null){
+                return null;
+            }
+            else if (client.checkPassword(password)) {
+                return client;
             }
         }
         return null;
@@ -96,4 +97,12 @@ public class Server
         return true;
     }
 
+    @Override
+    public void serializeClient(Client client) {
+        ClientsStorer.writeClient(client);
+    }
+
+    public Client deserialzeClient(String fileName) {
+        return ClientsStorer.readClient(fileName);
+    }
 }

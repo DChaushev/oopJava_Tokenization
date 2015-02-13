@@ -1,0 +1,22 @@
+<object-stream>
+  <com.fmi.oopjava.client.Client>
+    <name>Dimitar</name>
+    <username>mitko</username>
+    <password>1234aa</password>
+    <cards>
+      <com.fmi.oopjava.serverSide.BankCard>
+        <cardNumber>4563960122019991</cardNumber>
+        <tokens>
+          <string>1234243434269992</string>
+          <string>9856851273769991</string>
+          <string>1234243434269991</string>
+          <string>1715709860149991</string>
+          <string>8859515270749991</string>
+          <string>2714157879469991</string>
+          <string>1401683543369991</string>
+          <string>8277291647859991</string>
+        </tokens>
+      </com.fmi.oopjava.serverSide.BankCard>
+    </cards>
+  </com.fmi.oopjava.client.Client>
+</object-stream>

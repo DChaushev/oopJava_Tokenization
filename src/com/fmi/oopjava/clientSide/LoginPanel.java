@@ -101,13 +101,21 @@ public class LoginPanel extends javax.swing.JPanel {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
         try {
-            validateCredentials();
+            new Thread(() -> {
+                connectToServer();
+            }).start();
+            if (server != null) {
+                attemptLogin();
+            }
         } catch (RemoteException ex) {
             Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_btnLoginActionPerformed
 
+    private final String usernameMatcher = "[a-z0-9_]{3,16}";
+    private final String passwordMatcher = "((?=.*\\d)(?=.*[a-z]).{6,20})";
+    private final String emptyString = "";
     private RemoteServer server = new ServerConnector();
     private MainFrame frame;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -119,25 +127,23 @@ public class LoginPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
 
-    private void validateCredentials() throws RemoteException {
+    private void attemptLogin() throws RemoteException {
 
-        frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-        server = frame.getServer();
         if (!server.isUp()) {
-            lblNotification.setText("No connection to the server! Please try again later!");
+            lblNotification.setText(clientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
             return;
         }
 
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
 
-        if (!username.matches("[a-z0-9_]{3,16}")) {
-            lblNotification.setText("Invalid username format!");
+        if (!username.matches(usernameMatcher)) {
+            lblNotification.setText(clientNotifications.INVALID_USERNAME_FORMAT.getMessage());
             return;
         }
         String pswd = new String(password);
-        if (!pswd.matches("((?=.*\\d)(?=.*[a-z]).{6,20})")) {
-            lblNotification.setText("Invalid password format!");
+        if (!pswd.matches(passwordMatcher)) {
+            lblNotification.setText(clientNotifications.INVALID_PASSWORD_FORMAT.getMessage());
             return;
         }
 
@@ -147,9 +153,14 @@ public class LoginPanel extends javax.swing.JPanel {
             tp.setClient(c);
             frame.changePanel(this, tp);
         } else {
-            lblNotification.setText("Invalida username or password!");
-            txtUsername.setText("");
-            txtPassword.setText("");
+            lblNotification.setText(clientNotifications.INVALID_CREDENTIALS.getMessage());
+            txtUsername.setText(emptyString);
+            txtPassword.setText(emptyString);
         }
+    }
+
+    private void connectToServer() {
+        frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
+        server = frame.getServer();
     }
 }

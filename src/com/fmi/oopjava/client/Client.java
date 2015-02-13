@@ -5,7 +5,12 @@
  */
 package com.fmi.oopjava.client;
 
+import com.fmi.oopjava.serverSide.BankCard;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  *
@@ -14,27 +19,36 @@ import java.io.Serializable;
 public class Client implements Serializable {
 
     private String name;
-    
+
     private String username;
     private char[] password;
 
-    public Client() {
-    }
+    //@XStreamOmitField
+    private final Set<BankCard> cards;
 
     public Client(String name, String username, char[] password) {
         setName(name);
         setUsername(username);
         setPassword(password);
+        cards = new HashSet<>();
     }
 
-    public void setName(String name){
+    public void addCard(BankCard card) throws UnsupportedOperationException {
+        if (!cards.contains(card)) {
+            cards.add(card);
+        } else {
+            throw new UnsupportedOperationException("Card already exists!");
+        }
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
-    
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -59,4 +73,20 @@ public class Client implements Serializable {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s\n%s", name, username);
+    }
+
+    public BankCard getCard(String cardNumber) {
+
+        for (BankCard card : cards) {
+            if (card.getCardNumber().equals(cardNumber)) {
+                return card;
+            }
+        }
+        return null;
+    }
+
 }

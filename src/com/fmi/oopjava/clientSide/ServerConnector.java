@@ -60,4 +60,9 @@ public class ServerConnector implements RemoteServer {
         return server.getAllTokens(cardNumber);
     }
 
+    @Override
+    public void serializeClient(Client client) {
+        server.serializeClient(client);
+    }
+
 }

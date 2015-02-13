@@ -33,19 +33,20 @@ public class LuhnValidationTest {
         number1False = "1234567812345678";
         number2True = "4754091041477562";
         number2False = "4444333322221110";
-
         nullString = null;
         emptyString = new String();
     }
 
     @Test
-    public void testLuhnValidation() {
+    public void testLuhnValidationTrue() {
         assertTrue(isValid(number1True));
         assertTrue(isValid(number2True));
+    }
 
+    @Test
+    public void testLuhnValidationFalse() {
         assertFalse(isValid(number1False));
         assertFalse(isValid(number2False));
-
         assertFalse(isValid(nullString));
         assertFalse(isValid(emptyString));
     }

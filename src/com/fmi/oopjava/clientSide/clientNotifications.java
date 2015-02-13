@@ -18,7 +18,8 @@ public enum clientNotifications {
     INVALID_CARD_NUMBER("Invalid Card Number!"),
     TOKENIZATION_SUCCESSFULL("Tokenization successful!"),
     CARD_FOUND("Card Number found!"),
-    NO_TOKEN("No such token!");
+    NO_TOKEN("No such token!"),
+    ALREADY_LOGGED("You are already logged!");
 
     private final String message;
 

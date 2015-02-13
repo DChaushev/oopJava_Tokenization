@@ -61,8 +61,23 @@ public class ServerConnector implements RemoteServer {
     }
 
     @Override
-    public void serializeClient(Client client) {
+    public void serializeClient(Client client) throws RemoteException {
         server.serializeClient(client);
+    }
+
+    @Override
+    public void logout(Client client) throws RemoteException {
+        server.logout(client);
+    }
+
+    @Override
+    public boolean isLogged(Client client) throws RemoteException {
+        return server.isLogged(client);
+    }
+
+    @Override
+    public void login(Client client) throws RemoteException {
+        server.login(client);
     }
 
 }

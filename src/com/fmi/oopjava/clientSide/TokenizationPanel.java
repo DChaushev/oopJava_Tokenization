@@ -153,6 +153,7 @@ public class TokenizationPanel extends javax.swing.JPanel {
         try {
             init();
             server.serializeClient(client);
+            server.logout(client);
             client = null;
             frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
             frame.changePanel(this, new LoginPanel());

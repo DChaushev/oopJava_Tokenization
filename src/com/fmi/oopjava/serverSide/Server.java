@@ -28,11 +28,13 @@ public class Server
     private final Map<String, String> tokenMap;
     private final Map<String, List<String>> cardToTokensMap;
     private final Set<String> allTokens;
+    private final Set<String> online;
 
     public Server() throws RemoteException {
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
         cardToTokensMap = new TreeMap<>();
+        online = new HashSet<>();
     }
 
     @Override
@@ -40,10 +42,7 @@ public class Server
 
         if (ClientsStorer.clientExists(username)) {
             Client client = (Client) ClientsStorer.readClient(username);
-            if(client == null){
-                return null;
-            }
-            else if (client.checkPassword(password)) {
+            if (client != null && client.checkPassword(password)) {
                 return client;
             }
         }
@@ -104,5 +103,22 @@ public class Server
 
     public Client deserialzeClient(String fileName) {
         return ClientsStorer.readClient(fileName);
+    }
+
+    @Override
+    public void logout(Client client) {
+        if (online.contains(client.getUsername())) {
+            online.remove(client.getUsername());
+        }
+    }
+
+    @Override
+    public boolean isLogged(Client client) throws RemoteException {
+        return online.contains(client.getUsername());
+    }
+
+    @Override
+    public void login(Client client) throws RemoteException {
+        online.add(client.getUsername());
     }
 }

@@ -21,4 +21,8 @@ public interface RemoteServer extends Remote{
     public String getAllTokens(String cardNumber) throws RemoteException;
     public boolean isUp() throws RemoteException;
     public void serializeClient(Client client) throws RemoteException;
+
+    public void logout(Client client) throws RemoteException;
+    public void login(Client client) throws RemoteException;
+    public boolean isLogged(Client client) throws RemoteException;
 }

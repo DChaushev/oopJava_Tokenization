@@ -149,6 +149,12 @@ public class LoginPanel extends javax.swing.JPanel {
 
         Client c = server.validateCredentials(username, password);
         if (c != null) {
+
+            if (server.isLogged(c)) {
+                lblNotification.setText(clientNotifications.ALREADY_LOGGED.getMessage());
+                return;
+            }
+            server.login(c);
             TokenizationPanel tp = new TokenizationPanel();
             tp.setClient(c);
             frame.changePanel(this, tp);

@@ -28,16 +28,16 @@ public class Storer<T> {
     public final static String CLIENTS_FOLDER = "./XML_users";
     public final static String CARDS_FOLDER = "./XML_cards";
 
-    public synchronized void writeObject(Storable client, Class<T> objType) {
+    public synchronized void writeObject(Storable obj, Class<T> objType) {
 
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
 
-        String fileName = String.format("%s/%s.xml", getFolder(objType), client.getFileName());
+        String fileName = String.format("%s/%s.xml", getFolder(objType), obj.getFileName());
 
         try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(fileName))) {
 
-            oos.writeObject(client);
+            oos.writeObject(obj);
 
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -76,6 +76,11 @@ public class Storer<T> {
     
     public static boolean clientExists(String username) {
         File file = new File(CLIENTS_FOLDER + "/" + username + ".xml");
+        return file.exists();
+    }
+
+    public boolean cardExists(String cardNumber) {
+        File file = new File(CARDS_FOLDER + "/" + cardNumber + ".xml");
         return file.exists();
     }
 

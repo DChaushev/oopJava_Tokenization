@@ -100,10 +100,6 @@ public class Server<T>
         return true;
     }
 
-    public Client deserialzeClient(String fileName) {
-        return (Client) storer.readObject(fileName, Client.class);
-    }
-
     @Override
     public void logout(Client client) {
         if (online.contains(client.getUsername())) {
@@ -129,5 +125,10 @@ public class Server<T>
     @Override
     public T deserializeObject(String fileName, Class objectType) throws RemoteException {
         return (T) storer.readObject(fileName, objectType);
+    }
+
+    @Override
+    public boolean cardExists(String cardNumber) throws RemoteException {
+        return storer.cardExists(cardNumber);
     }
 }

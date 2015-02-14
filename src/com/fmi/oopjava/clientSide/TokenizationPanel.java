@@ -158,8 +158,6 @@ public class TokenizationPanel extends javax.swing.JPanel {
             server.serializeObject(client);
             server.logout(client);
             client = null;
-            frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-            frame.changePanel(this, new LoginPanel());
         } catch (RemoteException ex) {
             Logger.getLogger(TokenizationPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -214,7 +212,6 @@ public class TokenizationPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnGetCardNumberActionPerformed
     
-    private MainFrame frame;
     private RemoteServer server;
     private Client client = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -239,8 +236,6 @@ public class TokenizationPanel extends javax.swing.JPanel {
     }
     
     private void init() {
-        frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
-        server = frame.getServer();
     }
     
     private void setGreetings(String name) {

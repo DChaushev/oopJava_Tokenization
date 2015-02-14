@@ -19,7 +19,8 @@ public enum ClientNotifications {
     TOKENIZATION_SUCCESSFULL("Tokenization successful!"),
     CARD_FOUND("Card Number found!"),
     NO_TOKEN("No such token!"),
-    ALREADY_LOGGED("You are already logged!");
+    ALREADY_LOGGED("You are already logged!"),
+    FOREIGN_CARD("This is not your card!");
 
     private final String message;
 

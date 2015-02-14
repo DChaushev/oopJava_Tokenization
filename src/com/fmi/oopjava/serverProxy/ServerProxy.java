@@ -62,8 +62,8 @@ public class ServerProxy implements RemoteServer {
     }
 
     @Override
-    public void serializeObject(Storable client) throws RemoteException {
-        server.serializeObject(client);
+    public void serializeObject(Storable obj) throws RemoteException {
+        server.serializeObject(obj);
     }
 
     @Override
@@ -84,6 +84,11 @@ public class ServerProxy implements RemoteServer {
     @Override
     public Object deserializeObject(String fileName, Class objectType) throws RemoteException {
         return server.deserializeObject(fileName, objectType);
+    }
+
+    @Override
+    public boolean cardExists(String cardNumber) throws RemoteException {
+        return server.cardExists(cardNumber);
     }
 
 }

@@ -5,13 +5,17 @@
  */
 package com.fmi.oopjava.clientPanels;
 
+import com.fmi.oopjava.bankCard.BankCard;
+import com.fmi.oopjava.cardValidator.CardNumberValidator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.ClientNotifications;
 import com.fmi.oopjava.enums.RegularExpressions;
 import com.fmi.oopjava.serverProxy.ServerProxy;
+import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.smartcardio.Card;
 import javax.swing.JPanel;
 
 /**
@@ -49,7 +53,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
         lblTokenNotifications = new javax.swing.JLabel();
         txtEnterCard = new javax.swing.JTextField();
         txtGetToken = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        btnGenerateToken = new javax.swing.JButton();
         txtEnterToken = new javax.swing.JTextField();
         btnGetCard = new javax.swing.JButton();
         txtGetCard = new javax.swing.JTextField();
@@ -103,10 +107,10 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
         lblTokenNotifications.setText(" ");
 
-        jButton1.setText("Generate Token ->");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerateToken.setText("Generate Token ->");
+        btnGenerateToken.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGenerateTokenActionPerformed(evt);
             }
         });
 
@@ -133,7 +137,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                         .addGroup(TokenizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(TokenizationPanelLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jButton1)
+                                .addComponent(btnGenerateToken)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtGetToken, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(TokenizationPanelLayout.createSequentialGroup()
@@ -159,7 +163,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                 .addGroup(TokenizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEnterCard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtGetToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btnGenerateToken))
                 .addGap(41, 41, 41)
                 .addGroup(TokenizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEnterToken, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,13 +220,48 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        try {
+            server.serializeObject(client);
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
         client = null;
         changePanels(LoginPanel, TokenizationPanel);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTokenActionPerformed
+        String cardNumber = txtEnterCard.getText();
+        BankCard card = null;
+
+        if (CardNumberValidator.isValid(cardNumber)) {
+            try {
+                if (server.cardExists(cardNumber)) {
+                    if (!client.hasCard(cardNumber)) {
+                        lblTokenNotifications.setText(ClientNotifications.FOREIGN_CARD.getMessage());
+                        return;
+                    } else {
+                        card = (BankCard) server.deserializeObject(cardNumber, BankCard.class);
+                    }
+                } else {
+                    card = new BankCard(cardNumber);
+                    System.out.println(cardNumber);
+                    client.addCard(cardNumber);
+                    server.serializeObject(client);
+                }
+                
+                String token = TokenGenerator.generateToken(cardNumber);
+                txtGetToken.setText(token);
+                card.addToken(token);
+                server.serializeObject(card);
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+            lblTokenNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.getMessage());
+            return;
+        }
+    }//GEN-LAST:event_btnGenerateTokenActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,10 +301,10 @@ public class ClientMainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel TokenizationPanel;
+    private javax.swing.JButton btnGenerateToken;
     private javax.swing.JButton btnGetCard;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnLogout;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLabel lblGreetings;
     private javax.swing.JLabel lblLoginNotifications;
@@ -284,7 +323,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }
 
     private boolean login() throws RemoteException {
-        
+
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
 
@@ -299,7 +338,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
         if (server.validateCredentials(username, password)) {
             setClient(username);
-        }else{
+        } else {
             lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.getMessage());
             return false;
         }

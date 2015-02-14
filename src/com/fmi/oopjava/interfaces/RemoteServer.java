@@ -15,7 +15,7 @@ import java.rmi.RemoteException;
  */
 public interface RemoteServer<T> extends Remote{
     
-    public Client validateCredentials(String username, char[] password) throws RemoteException;
+    public boolean validateCredentials(String username, char[] password) throws RemoteException;
     public String generateToken(String cardNumber) throws RemoteException;
     public String getCardNumber(String token) throws RemoteException;
     public String getAllTokens(String cardNumber) throws RemoteException;

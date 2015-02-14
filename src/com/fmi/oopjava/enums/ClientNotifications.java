@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.clientSide;
+package com.fmi.oopjava.enums;
 
 /**
  *
  * @author Dimitar
  */
-public enum clientNotifications {
+public enum ClientNotifications {
 
     NO_CONNECTION_TO_SERVER("No connection to the server! Please try again later!"),
     INVALID_USERNAME_FORMAT("Invalid username format!"),
@@ -23,7 +23,7 @@ public enum clientNotifications {
 
     private final String message;
 
-    private clientNotifications(String message) {
+    private ClientNotifications(String message) {
         this.message = message;
     }
 

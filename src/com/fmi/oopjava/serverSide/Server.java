@@ -42,15 +42,15 @@ public class Server<T>
     }
 
     @Override
-    public Client validateCredentials(String username, char[] password) {
+    public boolean validateCredentials(String username, char[] password) {
 
         if (Storer.clientExists(username)) {
             Client client = (Client) storer.readObject(username, Client.class);
             if (client != null && client.checkPassword(password)) {
-                return client;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     @Override

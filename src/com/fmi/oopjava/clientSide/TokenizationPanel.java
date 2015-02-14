@@ -1,5 +1,6 @@
 package com.fmi.oopjava.clientSide;
 
+import com.fmi.oopjava.enums.ClientNotifications;
 import com.fmi.oopjava.cardValidator.CardNumberValidator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
@@ -167,11 +168,11 @@ public class TokenizationPanel extends javax.swing.JPanel {
     private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTokenActionPerformed
         String cardNumber = txtEnterCardNumber.getText();
         if (!CardNumberValidator.isValid(cardNumber)) {
-            lblNotifications.setText(clientNotifications.INVALID_CARD_NUMBER.getMessage());
+            lblNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.getMessage());
         } else {
             try {
                 init();
-                lblNotifications.setText(clientNotifications.TOKENIZATION_SUCCESSFULL.getMessage());
+                lblNotifications.setText(ClientNotifications.TOKENIZATION_SUCCESSFULL.getMessage());
                 
                 BankCard card = (BankCard) server.deserializeObject(cardNumber, BankCard.class);
                 if (card == null) {
@@ -204,9 +205,9 @@ public class TokenizationPanel extends javax.swing.JPanel {
             String cardNumber = server.getCardNumber(token);
             if (cardNumber != null) {
                 txtGetCardNumber.setText(cardNumber);
-                lblNotifications.setText(clientNotifications.CARD_FOUND.getMessage());
+                lblNotifications.setText(ClientNotifications.CARD_FOUND.getMessage());
             } else {
-                lblNotifications.setText(clientNotifications.NO_TOKEN.getMessage());
+                lblNotifications.setText(ClientNotifications.NO_TOKEN.getMessage());
             }
         } catch (RemoteException ex) {
             Logger.getLogger(TokenizationPanel.class.getName()).log(Level.SEVERE, null, ex);

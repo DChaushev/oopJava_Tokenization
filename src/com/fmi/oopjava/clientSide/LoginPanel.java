@@ -1,5 +1,6 @@
 package com.fmi.oopjava.clientSide;
 
+import com.fmi.oopjava.enums.ClientNotifications;
 import com.fmi.oopjava.serverProxy.ServerProxy;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
@@ -131,7 +132,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private void attemptLogin() throws RemoteException {
 
         if (!server.isUp()) {
-            lblNotification.setText(clientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
+            lblNotification.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
             return;
         }
 
@@ -139,12 +140,12 @@ public class LoginPanel extends javax.swing.JPanel {
         char[] password = txtPassword.getPassword();
 
         if (!username.matches(usernameMatcher)) {
-            lblNotification.setText(clientNotifications.INVALID_USERNAME_FORMAT.getMessage());
+            lblNotification.setText(ClientNotifications.INVALID_USERNAME_FORMAT.getMessage());
             return;
         }
         String pswd = new String(password);
         if (!pswd.matches(passwordMatcher)) {
-            lblNotification.setText(clientNotifications.INVALID_PASSWORD_FORMAT.getMessage());
+            lblNotification.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.getMessage());
             return;
         }
 
@@ -152,7 +153,7 @@ public class LoginPanel extends javax.swing.JPanel {
         if (c != null) {
 
             if (server.isLogged(c)) {
-                lblNotification.setText(clientNotifications.ALREADY_LOGGED.getMessage());
+                lblNotification.setText(ClientNotifications.ALREADY_LOGGED.getMessage());
                 return;
             }
             server.login(c);
@@ -160,7 +161,7 @@ public class LoginPanel extends javax.swing.JPanel {
             tp.setClient(c);
             frame.changePanel(this, tp);
         } else {
-            lblNotification.setText(clientNotifications.INVALID_CREDENTIALS.getMessage());
+            lblNotification.setText(ClientNotifications.INVALID_CREDENTIALS.getMessage());
             txtUsername.setText(emptyString);
             txtPassword.setText(emptyString);
         }

@@ -5,6 +5,7 @@
  */
 package com.fmi.oopjava.xmlSerializor;
 
+import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.Storable;
 import com.fmi.oopjava.serverSide.Server;
@@ -16,6 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,8 +52,15 @@ public class Storer<T> {
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
         T result = null;
-
-        try (ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(getFolder(objType) + "/" + fileName + ".xml"))) {
+        String file;
+        if(fileName.endsWith(".xml")){
+            file = getFolder(objType) + "/" + fileName;
+        }
+        else{
+            file = getFolder(objType) + "/" + fileName + ".xml";
+        }
+        
+        try (ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(file))) {
 
             result = (T) ois.readObject();
 
@@ -84,4 +94,18 @@ public class Storer<T> {
         return file.exists();
     }
 
+    public Set<BankCard> getAllCards() {
+        Set<BankCard> cards = new HashSet<>();
+        
+        File folder = new File(CARDS_FOLDER);
+        File[] listOfFiles = folder.listFiles();
+        
+        for (File file : listOfFiles) {
+            String name = file.getName();
+            System.out.println(name);
+            BankCard card = (BankCard) readObject(name, (Class<T>) BankCard.class);
+            cards.add(card);
+        }
+        return cards;
+    }
 }

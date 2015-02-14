@@ -5,6 +5,7 @@
  */
 package com.fmi.oopjava.serverSide;
 
+import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
@@ -114,5 +115,17 @@ public class Server<T>
     @Override
     public boolean cardExists(String cardNumber) throws RemoteException {
         return storer.cardExists(cardNumber);
+    }
+
+    boolean userExists(String username) {
+        return storer.clientExists(username);
+    }
+    
+    Set<BankCard> getAllBankCards(){
+        return storer.getAllCards();
+    }
+
+    void outputCardsByToken(Set<BankCard> cards) {
+        
     }
 }

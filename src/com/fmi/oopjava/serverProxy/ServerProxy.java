@@ -20,27 +20,30 @@ import java.rmi.registry.Registry;
 public class ServerProxy implements RemoteServer {
 
     private RemoteServer server = null;
+    private Registry registry;
+    private boolean isRunning;
 
     public ServerProxy() {
         connect();
     }
 
-    private void connect() {
+    public void connect() {
         try {
-            Registry registry = LocateRegistry.getRegistry();
+            registry = LocateRegistry.getRegistry();
             server = (RemoteServer) registry.lookup("remoteServer");
-
+            isRunning = true;
         } catch (RemoteException | NotBoundException ex) {
-            ex.printStackTrace();
-            
+            isRunning = false;
+            //ex.printStackTrace();
         }
     }
 
     @Override
-    public boolean isUp(){
-        return server != null;
+    public boolean isUp() {
+        connect();
+        return isRunning;
     }
-    
+
     @Override
     public boolean validateCredentials(String username, char[] password) throws RemoteException {
         return server.validateCredentials(username, password);

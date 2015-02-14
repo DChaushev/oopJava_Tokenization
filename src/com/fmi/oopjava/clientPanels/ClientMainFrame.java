@@ -28,7 +28,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
     public ClientMainFrame() {
         initComponents();
         TokenizationPanel.setVisible(false);
-        server = connectToServer();
+        server = new ServerProxy();
     }
 
     /**
@@ -207,13 +207,13 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        attemptConnection();
-        if (noConnection()) {
-            lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
+        if(!server.isUp()){
+            attemptConnection();
             return;
         }
         try {
-            if (login()) {
+            if (loginSuccessfully()) {
+                lblLoginNotifications.setText("");
                 changePanels(TokenizationPanel, LoginPanel);
                 lblGreetings.setText(String.format("Hello, %s", client.getName()));
             }
@@ -228,6 +228,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
         } catch (RemoteException ex) {
             Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        clearFields();
         client = null;
         changePanels(LoginPanel, TokenizationPanel);
     }//GEN-LAST:event_btnLogoutActionPerformed
@@ -241,6 +242,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                 if (server.cardExists(cardNumber)) {
                     if (!client.hasCard(cardNumber)) {
                         lblTokenNotifications.setText(ClientNotifications.FOREIGN_CARD.getMessage());
+                        clearFields();
                         return;
                     } else {
                         card = (BankCard) server.deserializeObject(cardNumber, BankCard.class);
@@ -251,7 +253,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                     client.addCard(cardNumber);
                     server.serializeObject(client);
                 }
-                
+
                 String token = server.generateToken(cardNumber);
                 txtGetToken.setText(token);
                 card.addToken(token);
@@ -270,15 +272,14 @@ public class ClientMainFrame extends javax.swing.JFrame {
         String token = txtEnterToken.getText();
         try {
             String cardNumber = server.getCardNumber(token);
-            
-            if(cardNumber != null){
+
+            if (cardNumber != null) {
                 lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.getMessage());
-                txtGetCard.setText(token);
-            }
-            else{
+                txtGetCard.setText(cardNumber);
+            } else {
                 lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.getMessage());
             }
-            
+
         } catch (RemoteException ex) {
             Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -343,7 +344,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
         show.setVisible(true);
     }
 
-    private boolean login() throws RemoteException {
+    private boolean loginSuccessfully() throws RemoteException {
 
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
@@ -367,23 +368,23 @@ public class ClientMainFrame extends javax.swing.JFrame {
         return true;
     }
 
-    private boolean noConnection() {
-        return !server.isUp();
+    private void setClient(String username) throws RemoteException {
+        client = (Client) server.deserializeObject(username, Client.class);
     }
 
     private void attemptConnection() {
-        if (server == null || !server.isUp()) {
-            new Thread(() -> {
-                server = connectToServer();
-            });
-        }
+        new Thread(() -> {
+           server.connect();
+        });
+        lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
     }
 
-    private ServerProxy connectToServer() {
-        return new ServerProxy();
-    }
-
-    private void setClient(String username) throws RemoteException {
-        client = (Client) server.deserializeObject(username, Client.class);
+    private void clearFields() {
+        txtEnterCard.setText("");
+        txtEnterToken.setText("");
+        txtGetCard.setText("");
+        txtGetToken.setText("");
+        txtPassword.setText("");
+        txtUsername.setText("");
     }
 }

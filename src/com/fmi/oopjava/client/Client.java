@@ -8,6 +8,7 @@ package com.fmi.oopjava.client;
 import com.fmi.oopjava.interfaces.Storable;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -87,4 +88,18 @@ public class Client implements Serializable, Storable {
         return cards.contains(cardNumber);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Client c = (Client) obj;
+        return this.username.equals(c.getUsername());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.name);
+        hash = 67 * hash + Objects.hashCode(this.username);
+        return hash;
+    }
+    
 }

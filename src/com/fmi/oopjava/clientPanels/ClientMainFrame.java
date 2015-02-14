@@ -11,11 +11,9 @@ import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.ClientNotifications;
 import com.fmi.oopjava.enums.RegularExpressions;
 import com.fmi.oopjava.serverProxy.ServerProxy;
-import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.smartcardio.Card;
 import javax.swing.JPanel;
 
 /**
@@ -115,6 +113,11 @@ public class ClientMainFrame extends javax.swing.JFrame {
         });
 
         btnGetCard.setText("Get card number ->");
+        btnGetCard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetCardActionPerformed(evt);
+            }
+        });
 
         lblGreetings.setText(" ");
 
@@ -249,7 +252,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                     server.serializeObject(client);
                 }
                 
-                String token = TokenGenerator.generateToken(cardNumber);
+                String token = server.generateToken(cardNumber);
                 txtGetToken.setText(token);
                 card.addToken(token);
                 server.serializeObject(card);
@@ -262,6 +265,24 @@ public class ClientMainFrame extends javax.swing.JFrame {
             return;
         }
     }//GEN-LAST:event_btnGenerateTokenActionPerformed
+
+    private void btnGetCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetCardActionPerformed
+        String token = txtEnterToken.getText();
+        try {
+            String cardNumber = server.getCardNumber(token);
+            
+            if(cardNumber != null){
+                lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.getMessage());
+                txtGetCard.setText(token);
+            }
+            else{
+                lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.getMessage());
+            }
+            
+        } catch (RemoteException ex) {
+            Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGetCardActionPerformed
 
     /**
      * @param args the command line arguments

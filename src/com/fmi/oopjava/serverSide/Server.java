@@ -5,16 +5,14 @@
  */
 package com.fmi.oopjava.serverSide;
 
+import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
 import com.fmi.oopjava.interfaces.Storable;
-import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import com.fmi.oopjava.xmlSerializor.Storer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -28,16 +26,13 @@ public class Server<T>
 
     private final Storer storer;
     private final Map<String, String> tokenMap;
-    private final Map<String, List<String>> cardToTokensMap;
     private final Set<String> allTokens;
     private final Set<String> online;
 
     public Server() throws RemoteException {
         storer = new Storer();
-        
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
-        cardToTokensMap = new TreeMap<>();
         online = new HashSet<>();
     }
 
@@ -66,32 +61,21 @@ public class Server<T>
         allTokens.add(token);
 
         tokenMap.put(token, cardNumber);
-        if (!cardToTokensMap.containsKey(cardNumber)) {
-            cardToTokensMap.put(cardNumber, new ArrayList<>());
-        }
-        cardToTokensMap.get(cardNumber).add(token);
+  
         return token;
     }
 
     @Override
     public String getCardNumber(String token) {
+        System.out.println(tokenMap);
         if (tokenMap.containsKey(token)) {
             return tokenMap.get(token);
         }
         return null;
     }
 
-    @Override
     public String getAllTokens(String cardNumber) throws RemoteException {
-        StringBuilder result;
-        if (cardToTokensMap.containsKey(cardNumber)) {
-            result = new StringBuilder();
-            List tokens = cardToTokensMap.get(cardNumber);
-            tokens.stream().forEach((token) -> {
-                result.append(String.format("%s\n", token));
-            });
-            return result.toString();
-        }
+        
         return null;
     }
 

@@ -57,11 +57,6 @@ public class ServerProxy implements RemoteServer {
     }
 
     @Override
-    public String getAllTokens(String cardNumber) throws RemoteException {
-        return server.getAllTokens(cardNumber);
-    }
-
-    @Override
     public void serializeObject(Storable obj) throws RemoteException {
         server.serializeObject(obj);
     }

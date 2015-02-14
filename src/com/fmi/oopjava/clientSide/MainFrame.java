@@ -1,6 +1,6 @@
 package com.fmi.oopjava.clientSide;
 
-import com.fmi.oopjava.remoteInterface.RemoteServer;
+import com.fmi.oopjava.interfaces.RemoteServer;
 import java.rmi.RemoteException;
 import javax.swing.JPanel;
 

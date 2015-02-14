@@ -1,7 +1,7 @@
 package com.fmi.oopjava.clientSide;
 
 import com.fmi.oopjava.client.Client;
-import com.fmi.oopjava.remoteInterface.RemoteServer;
+import com.fmi.oopjava.interfaces.RemoteServer;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

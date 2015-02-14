@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.remoteInterface;
+package com.fmi.oopjava.interfaces;
 
 import com.fmi.oopjava.client.Client;
 import java.rmi.Remote;
@@ -20,7 +20,7 @@ public interface RemoteServer extends Remote{
     public String getCardNumber(String token) throws RemoteException;
     public String getAllTokens(String cardNumber) throws RemoteException;
     public boolean isUp() throws RemoteException;
-    public void serializeClient(Client client) throws RemoteException;
+    public void serializeObject(Storable client) throws RemoteException;
 
     public void logout(Client client) throws RemoteException;
     public void login(Client client) throws RemoteException;

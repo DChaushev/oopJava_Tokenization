@@ -6,9 +6,10 @@
 package com.fmi.oopjava.serverSide;
 
 import com.fmi.oopjava.client.Client;
-import com.fmi.oopjava.remoteInterface.RemoteServer;
+import com.fmi.oopjava.interfaces.RemoteServer;
+import com.fmi.oopjava.interfaces.Storable;
 import com.fmi.oopjava.tokenGenerator.TokenGenerator;
-import com.fmi.oopjava.xmlSerializor.ClientsStorer;
+import com.fmi.oopjava.xmlSerializor.Storer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -25,12 +26,15 @@ import java.util.TreeMap;
 public class Server
         extends UnicastRemoteObject implements RemoteServer {
 
+    private final Storer storer;
     private final Map<String, String> tokenMap;
     private final Map<String, List<String>> cardToTokensMap;
     private final Set<String> allTokens;
     private final Set<String> online;
 
     public Server() throws RemoteException {
+        storer = new Storer();
+        
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
         cardToTokensMap = new TreeMap<>();
@@ -40,8 +44,8 @@ public class Server
     @Override
     public Client validateCredentials(String username, char[] password) {
 
-        if (ClientsStorer.clientExists(username)) {
-            Client client = (Client) ClientsStorer.readClient(username);
+        if (Storer.clientExists(username)) {
+            Client client = (Client) storer.readObject(username, Client.class);
             if (client != null && client.checkPassword(password)) {
                 return client;
             }
@@ -96,13 +100,8 @@ public class Server
         return true;
     }
 
-    @Override
-    public void serializeClient(Client client) {
-        ClientsStorer.writeClient(client);
-    }
-
     public Client deserialzeClient(String fileName) {
-        return ClientsStorer.readClient(fileName);
+        return (Client) storer.readObject(fileName, Client.class);
     }
 
     @Override
@@ -120,5 +119,10 @@ public class Server
     @Override
     public void login(Client client) throws RemoteException {
         online.add(client.getUsername());
+    }
+
+    @Override
+    public void serializeObject(Storable obj) throws RemoteException {
+        storer.writeObject(obj, obj.getClass());
     }
 }

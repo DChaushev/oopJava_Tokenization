@@ -5,6 +5,7 @@
  */
 package com.fmi.oopjava.serverSide;
 
+import com.fmi.oopjava.interfaces.Storable;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Set;
  *
  * @author Dimitar
  */
-public class BankCard implements Serializable{
+public class BankCard implements Serializable, Storable{
     
     private String cardNumber;
     private Set<String> tokens;
@@ -57,6 +58,11 @@ public class BankCard implements Serializable{
         hash = 79 * hash + Objects.hashCode(this.cardNumber);
         hash = 79 * hash + Objects.hashCode(this.tokens);
         return hash;
+    }
+
+    @Override
+    public String getFileName() {
+        return cardNumber;
     }
     
 }

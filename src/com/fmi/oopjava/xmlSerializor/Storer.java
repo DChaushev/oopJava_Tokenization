@@ -6,6 +6,7 @@
 package com.fmi.oopjava.xmlSerializor;
 
 import com.fmi.oopjava.client.Client;
+import com.fmi.oopjava.interfaces.Storable;
 import com.fmi.oopjava.serverSide.Server;
 import com.thoughtworks.xstream.XStream;
 import java.io.File;
@@ -22,16 +23,17 @@ import java.util.logging.Logger;
  *
  * @author Dimitar
  */
-public class ClientsStorer {
+public class Storer<T> {
 
-    public final static String CLIENTS_FOLDER = "./XML";
+    public final static String CLIENTS_FOLDER = "./XML_users";
+    public final static String CARDS_FOLDER = "./XML_cards";
 
-    public synchronized static void writeClient(Client client) {
+    public synchronized void writeObject(Storable client, Class<T> objType) {
 
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
 
-        String fileName = String.format(CLIENTS_FOLDER + "/%s.xml", client.getUsername());
+        String fileName = String.format("%s/%s.xml", getFolder(objType), client.getFileName());
 
         try (ObjectOutputStream oos = xstream.createObjectOutputStream(new FileOutputStream(fileName))) {
 
@@ -42,30 +44,36 @@ public class ClientsStorer {
         }
     }
 
-    public static Client readClient(String userName) {
+    public T readObject(String fileName, Class<T> objType) {
 
         XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
-        Client client = null;
+        T result = null;
 
-        try (ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(CLIENTS_FOLDER + "/" + userName + ".xml"))) {
+        try (ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(getFolder(objType) + "/" + fileName + ".xml"))) {
 
-            client = (Client) ois.readObject();
+            result = (T) ois.readObject();
 
-        } catch (com.thoughtworks.xstream.mapper.CannotResolveClassException ex) {
+        } catch (com.thoughtworks.xstream.mapper.CannotResolveClassException | FileNotFoundException ex) {
             return null;
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (ClassNotFoundException | IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return client;
+        return result;
 
     }
 
+    private String getFolder(Class<T> objType){
+        String folder;
+        if (objType == Client.class) {
+            folder = CLIENTS_FOLDER;
+        } else {
+            folder = CARDS_FOLDER;
+        }
+        return folder;
+    }
+    
     public static boolean clientExists(String username) {
         File file = new File(CLIENTS_FOLDER + "/" + username + ".xml");
         return file.exists();

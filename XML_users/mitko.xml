@@ -1,0 +1,11 @@
+<object-stream>
+  <com.fmi.oopjava.client.Client>
+    <name>Dimitar</name>
+    <username>mitko</username>
+    <password>1234aa</password>
+    <cards>
+      <string>4563960122019992</string>
+      <string>4563960122019991</string>
+    </cards>
+  </com.fmi.oopjava.client.Client>
+</object-stream>

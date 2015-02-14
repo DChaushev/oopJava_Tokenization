@@ -1,0 +1,13 @@
+<object-stream>
+  <com.fmi.oopjava.serverSide.BankCard>
+    <cardNumber>4563960122019991</cardNumber>
+    <tokens>
+      <string>9040832768279991</string>
+      <string>9107835450639991</string>
+      <string>7235741550269991</string>
+      <string>7077598700289991</string>
+      <string>1789014774159991</string>
+      <string>9444344684609991</string>
+    </tokens>
+  </com.fmi.oopjava.serverSide.BankCard>
+</object-stream>

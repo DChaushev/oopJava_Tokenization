@@ -1,8 +1,9 @@
 package com.fmi.oopjava.clientSide;
 
 import com.fmi.oopjava.client.Client;
-import com.fmi.oopjava.remoteInterface.RemoteServer;
+import com.fmi.oopjava.interfaces.RemoteServer;
 import com.fmi.oopjava.serverSide.BankCard;
+import com.fmi.oopjava.xmlSerializor.Storer;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,7 +153,7 @@ public class TokenizationPanel extends javax.swing.JPanel {
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         try {
             init();
-            server.serializeClient(client);
+            server.serializeObject(client);
             server.logout(client);
             client = null;
             frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
@@ -169,17 +170,27 @@ public class TokenizationPanel extends javax.swing.JPanel {
         } else {
             try {
                 init();
-                String token = server.generateToken(cardNumber);
-                txtGeneratedToken.setText(token);
                 lblNotifications.setText(clientNotifications.TOKENIZATION_SUCCESSFULL.getMessage());
-
-                BankCard card = client.getCard(cardNumber);
+                
+                Storer storer = new Storer();
+                BankCard card = (BankCard) storer.readObject(cardNumber, BankCard.class);
                 if (card == null) {
                     card = new BankCard(cardNumber);
-                    client.addCard(card);
+                    storer.writeObject(card, BankCard.class);
                 }
+                else if(card != null && !client.hasCard(cardNumber)){
+                    lblNotifications.setText("This is not your card!");
+                    return;
+                }
+                if (!client.hasCard(cardNumber)) {
+                    client.addCard(cardNumber);
+                }
+                
+                String token = server.generateToken(cardNumber);
+                txtGeneratedToken.setText(token);
                 card.addToken(token);
-
+                storer.writeObject(card, BankCard.class);
+                
             } catch (RemoteException ex) {
                 Logger.getLogger(TokenizationPanel.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -201,7 +212,7 @@ public class TokenizationPanel extends javax.swing.JPanel {
             Logger.getLogger(TokenizationPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnGetCardNumberActionPerformed
-
+    
     private MainFrame frame;
     private RemoteServer server;
     private Client client = null;
@@ -225,12 +236,12 @@ public class TokenizationPanel extends javax.swing.JPanel {
         client = c;
         setGreetings(c.getName());
     }
-
+    
     private void init() {
         frame = (MainFrame) SwingUtilities.getWindowAncestor(this);
         server = frame.getServer();
     }
-
+    
     private void setGreetings(String name) {
         lblGreetings.setText(String.format("Hello, %s!", name));
     }

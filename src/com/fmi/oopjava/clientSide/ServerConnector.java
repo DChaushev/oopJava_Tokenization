@@ -6,7 +6,8 @@
 package com.fmi.oopjava.clientSide;
 
 import com.fmi.oopjava.client.Client;
-import com.fmi.oopjava.remoteInterface.RemoteServer;
+import com.fmi.oopjava.interfaces.RemoteServer;
+import com.fmi.oopjava.interfaces.Storable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -61,8 +62,8 @@ public class ServerConnector implements RemoteServer {
     }
 
     @Override
-    public void serializeClient(Client client) throws RemoteException {
-        server.serializeClient(client);
+    public void serializeObject(Storable client) throws RemoteException {
+        server.serializeObject(client);
     }
 
     @Override

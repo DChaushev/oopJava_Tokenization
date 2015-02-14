@@ -4,20 +4,8 @@
     <username>ivan</username>
     <password>1234aa</password>
     <cards>
-      <com.fmi.oopjava.serverSide.BankCard>
-        <cardNumber>4563960122019992</cardNumber>
-        <tokens>
-          <string>1234243434269992</string>
-          <string>1234243434269991</string>
-        </tokens>
-      </com.fmi.oopjava.serverSide.BankCard>
-      <com.fmi.oopjava.serverSide.BankCard>
-        <cardNumber>4563960122019991</cardNumber>
-        <tokens>
-          <string>1234243434269992</string>
-          <string>1234243434269991</string>
-        </tokens>
-      </com.fmi.oopjava.serverSide.BankCard>
+      <string>1234243434269992</string>
+      <string>1234243434269991</string>
     </cards>
   </com.fmi.oopjava.client.Client>
 </object-stream>

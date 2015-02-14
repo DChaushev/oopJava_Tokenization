@@ -1,5 +1,6 @@
 package com.fmi.oopjava.clientSide;
 
+import com.fmi.oopjava.serverProxy.ServerProxy;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
 import java.rmi.RemoteException;
@@ -116,7 +117,7 @@ public class LoginPanel extends javax.swing.JPanel {
     private final String usernameMatcher = "[a-z0-9_]{3,16}";
     private final String passwordMatcher = "((?=.*\\d)(?=.*[a-z]).{6,20})";
     private final String emptyString = "";
-    private RemoteServer server = new ServerConnector();
+    private RemoteServer server = new ServerProxy();
     private MainFrame frame;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;

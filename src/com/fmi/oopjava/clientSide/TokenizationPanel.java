@@ -1,8 +1,9 @@
 package com.fmi.oopjava.clientSide;
 
+import com.fmi.oopjava.cardValidator.CardNumberValidator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
-import com.fmi.oopjava.serverSide.BankCard;
+import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.xmlSerializor.Storer;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -172,11 +173,10 @@ public class TokenizationPanel extends javax.swing.JPanel {
                 init();
                 lblNotifications.setText(clientNotifications.TOKENIZATION_SUCCESSFULL.getMessage());
                 
-                Storer storer = new Storer();
-                BankCard card = (BankCard) storer.readObject(cardNumber, BankCard.class);
+                BankCard card = (BankCard) server.deserializeObject(cardNumber, BankCard.class);
                 if (card == null) {
                     card = new BankCard(cardNumber);
-                    storer.writeObject(card, BankCard.class);
+                    server.serializeObject(card);
                 }
                 else if(card != null && !client.hasCard(cardNumber)){
                     lblNotifications.setText("This is not your card!");
@@ -189,7 +189,7 @@ public class TokenizationPanel extends javax.swing.JPanel {
                 String token = server.generateToken(cardNumber);
                 txtGeneratedToken.setText(token);
                 card.addToken(token);
-                storer.writeObject(card, BankCard.class);
+                server.serializeObject(card);
                 
             } catch (RemoteException ex) {
                 Logger.getLogger(TokenizationPanel.class.getName()).log(Level.SEVERE, null, ex);

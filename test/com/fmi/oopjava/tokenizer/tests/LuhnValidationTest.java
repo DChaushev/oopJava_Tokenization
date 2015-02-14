@@ -5,7 +5,7 @@
  */
 package com.fmi.oopjava.tokenizer.tests;
 
-import static com.fmi.oopjava.clientSide.CardNumberValidator.isValid;
+import static com.fmi.oopjava.cardValidator.CardNumberValidator.isValid;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

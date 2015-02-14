@@ -23,7 +23,7 @@ import java.util.TreeMap;
  *
  * @author Dimitar
  */
-public class Server
+public class Server<T>
         extends UnicastRemoteObject implements RemoteServer {
 
     private final Storer storer;
@@ -124,5 +124,10 @@ public class Server
     @Override
     public void serializeObject(Storable obj) throws RemoteException {
         storer.writeObject(obj, obj.getClass());
+    }
+
+    @Override
+    public T deserializeObject(String fileName, Class objectType) throws RemoteException {
+        return (T) storer.readObject(fileName, objectType);
     }
 }

@@ -6,7 +6,7 @@
 package com.fmi.oopjava.tokenizer.tests;
 
 import com.fmi.oopjava.client.Client;
-import com.fmi.oopjava.serverSide.BankCard;
+import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.xmlSerializor.Storer;
 import org.junit.BeforeClass;
 import org.junit.Test;

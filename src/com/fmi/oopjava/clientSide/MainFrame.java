@@ -1,5 +1,6 @@
 package com.fmi.oopjava.clientSide;
 
+import com.fmi.oopjava.serverProxy.ServerProxy;
 import com.fmi.oopjava.interfaces.RemoteServer;
 import java.rmi.RemoteException;
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import javax.swing.JPanel;
 public class MainFrame extends javax.swing.JFrame {
 
     private static void connectToServer() {
-        server = new ServerConnector();
+        server = new ServerProxy();
     }
 
     /**

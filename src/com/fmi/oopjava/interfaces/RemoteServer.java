@@ -13,16 +13,19 @@ import java.rmi.RemoteException;
  *
  * @author Dimitar
  */
-public interface RemoteServer extends Remote{
+public interface RemoteServer<T> extends Remote{
     
     public Client validateCredentials(String username, char[] password) throws RemoteException;
     public String generateToken(String cardNumber) throws RemoteException;
     public String getCardNumber(String token) throws RemoteException;
     public String getAllTokens(String cardNumber) throws RemoteException;
     public boolean isUp() throws RemoteException;
-    public void serializeObject(Storable client) throws RemoteException;
 
     public void logout(Client client) throws RemoteException;
     public void login(Client client) throws RemoteException;
     public boolean isLogged(Client client) throws RemoteException;
+   
+    public void serializeObject(Storable client) throws RemoteException;
+    public T deserializeObject(String fileName, Class objectType) throws RemoteException;
+    
 }

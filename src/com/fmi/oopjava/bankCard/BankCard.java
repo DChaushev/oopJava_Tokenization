@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.serverSide;
+package com.fmi.oopjava.bankCard;
 
 import com.fmi.oopjava.interfaces.Storable;
 import java.io.Serializable;

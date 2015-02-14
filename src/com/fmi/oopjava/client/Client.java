@@ -6,7 +6,6 @@
 package com.fmi.oopjava.client;
 
 import com.fmi.oopjava.interfaces.Storable;
-import com.fmi.oopjava.serverSide.BankCard;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

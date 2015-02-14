@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.clientSide;
+package com.fmi.oopjava.serverProxy;
 
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
@@ -17,11 +17,11 @@ import java.rmi.registry.Registry;
  *
  * @author Dimitar
  */
-public class ServerConnector implements RemoteServer {
+public class ServerProxy implements RemoteServer {
 
     private RemoteServer server = null;
 
-    public ServerConnector() {
+    public ServerProxy() {
         connect();
     }
 
@@ -79,6 +79,11 @@ public class ServerConnector implements RemoteServer {
     @Override
     public void login(Client client) throws RemoteException {
         server.login(client);
+    }
+
+    @Override
+    public Object deserializeObject(String fileName, Class objectType) throws RemoteException {
+        return server.deserializeObject(fileName, objectType);
     }
 
 }

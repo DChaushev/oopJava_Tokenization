@@ -10,6 +10,7 @@ import com.fmi.oopjava.tokenGenerator.TokenGenerator;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.RemoteServer;
 import com.fmi.oopjava.interfaces.Storable;
+import com.fmi.oopjava.txtOutputWriter.TxtOutputWriter;
 import com.fmi.oopjava.xmlSerializor.Storer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  *
@@ -121,11 +123,16 @@ public class Server<T>
         return storer.clientExists(username);
     }
     
-    Set<BankCard> getAllBankCards(){
-        return storer.getAllCards();
-    }
-
-    void outputCardsByToken(Set<BankCard> cards) {
+    boolean generateOutput() {
+    
+        Set<BankCard> allCards = storer.getAllCards();
+        if(allCards.isEmpty()){
+            return false;
+        }
+        
+        TxtOutputWriter.writeOutput(allCards);
+        
+        return true;
         
     }
 }

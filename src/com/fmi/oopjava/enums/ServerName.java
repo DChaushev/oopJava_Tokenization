@@ -9,20 +9,19 @@ package com.fmi.oopjava.enums;
  *
  * @author Dimitar
  */
-public enum RegularExpressions {
+public enum ServerName {
     
-    VALIDATE_USERNAME("[a-z0-9_]{3,16}"),
-    VALIDATE_PASSWORD("((?=.*\\d)(?=.*[a-z]).{6,20})");
-    
-    private final String regex;
+    NAME("tokenizationServer");
 
-    private RegularExpressions(String regex) {
-        this.regex = regex;
+    private final String message;
+
+    private ServerName(String message) {
+        this.message = message;
     }
 
     @Override
     public String toString() {
-        return regex;
+        return this.message;
     }
     
 }

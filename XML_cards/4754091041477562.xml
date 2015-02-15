@@ -2,7 +2,13 @@
   <com.fmi.oopjava.bankCard.BankCard>
     <cardNumber>4754091041477562</cardNumber>
     <tokens>
+      <string>9495627403857562</string>
+      <string>1876109182717562</string>
+      <string>8036430185817562</string>
+      <string>2260313159397562</string>
       <string>9565722950187562</string>
+      <string>1326920239867562</string>
+      <string>7589479625917562</string>
     </tokens>
   </com.fmi.oopjava.bankCard.BankCard>
 </object-stream>

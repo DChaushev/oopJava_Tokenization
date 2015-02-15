@@ -7,15 +7,15 @@ package com.fmi.oopjava.bankCard;
 
 import com.fmi.oopjava.interfaces.Storable;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
  * @author Dimitar
  */
-public class BankCard implements Serializable, Storable{
+public class BankCard implements Serializable, Storable, Comparable{
     
     private String cardNumber;
     private Set<String> tokens;
@@ -26,7 +26,7 @@ public class BankCard implements Serializable, Storable{
 
     public BankCard(String cardNumber) {
         this.cardNumber = cardNumber;
-        tokens = new HashSet<>();
+        tokens = new TreeSet<>();
     }
 
     public void addToken(String token){
@@ -43,7 +43,7 @@ public class BankCard implements Serializable, Storable{
     }
 
     public Set<String> getTokens() {
-        return new HashSet<>(tokens);
+        return new TreeSet<>(tokens);
     }
 
     @Override
@@ -63,6 +63,15 @@ public class BankCard implements Serializable, Storable{
     @Override
     public String getFileName() {
         return cardNumber;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        BankCard bc = (BankCard) o;
+        if(equals(bc)){
+            return 0;
+        }
+        return this.getCardNumber().compareTo(bc.getCardNumber());
     }
     
 }

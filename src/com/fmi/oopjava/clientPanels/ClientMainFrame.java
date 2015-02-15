@@ -241,7 +241,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
             try {
                 if (server.cardExists(cardNumber)) {
                     if (!client.hasCard(cardNumber)) {
-                        lblTokenNotifications.setText(ClientNotifications.FOREIGN_CARD.getMessage());
+                        lblTokenNotifications.setText(ClientNotifications.FOREIGN_CARD.toString());
                         clearFields();
                         return;
                     } else {
@@ -263,7 +263,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
             }
 
         } else {
-            lblTokenNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.getMessage());
+            lblTokenNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.toString());
             return;
         }
     }//GEN-LAST:event_btnGenerateTokenActionPerformed
@@ -274,10 +274,10 @@ public class ClientMainFrame extends javax.swing.JFrame {
             String cardNumber = server.getCardNumber(token);
 
             if (cardNumber != null) {
-                lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.getMessage());
+                lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.toString());
                 txtGetCard.setText(cardNumber);
             } else {
-                lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.getMessage());
+                lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.toString());
             }
 
         } catch (RemoteException ex) {
@@ -349,19 +349,19 @@ public class ClientMainFrame extends javax.swing.JFrame {
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
 
-        if (!username.matches(RegularExpressions.VALIDATE_USERNAME.getRegex())) {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.getMessage());
+        if (!username.matches(RegularExpressions.VALIDATE_USERNAME.toString())) {
+            lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.toString());
             return false;
         }
-        if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.getRegex()))) {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.getMessage());
+        if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString()))) {
+            lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.toString());
             return false;
         }
 
         if (server.validateCredentials(username, password)) {
             setClient(username);
         } else {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.getMessage());
+            lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.toString());
             return false;
         }
 
@@ -376,7 +376,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
         new Thread(() -> {
            server.connect();
         });
-        lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.getMessage());
+        lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
     }
 
     private void clearFields() {

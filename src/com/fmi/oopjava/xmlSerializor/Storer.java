@@ -17,8 +17,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,13 +53,12 @@ public class Storer<T> {
         xstream.autodetectAnnotations(true);
         T result = null;
         String file;
-        if(fileName.endsWith(".xml")){
+        if (fileName.endsWith(".xml")) {
             file = getFolder(objType) + "/" + fileName;
-        }
-        else{
+        } else {
             file = getFolder(objType) + "/" + fileName + ".xml";
         }
-        
+
         try (ObjectInputStream ois = xstream.createObjectInputStream(new FileInputStream(file))) {
 
             result = (T) ois.readObject();
@@ -74,7 +73,7 @@ public class Storer<T> {
 
     }
 
-    private String getFolder(Class<T> objType){
+    private String getFolder(Class<T> objType) {
         String folder;
         if (objType == Client.class) {
             folder = CLIENTS_FOLDER;
@@ -83,7 +82,7 @@ public class Storer<T> {
         }
         return folder;
     }
-    
+
     public static boolean clientExists(String username) {
         File file = new File(CLIENTS_FOLDER + "/" + username + ".xml");
         return file.exists();
@@ -95,16 +94,17 @@ public class Storer<T> {
     }
 
     public Set<BankCard> getAllCards() {
-        Set<BankCard> cards = new HashSet<>();
-        
+        Set<BankCard> cards = new TreeSet<>();
+
         File folder = new File(CARDS_FOLDER);
         File[] listOfFiles = folder.listFiles();
-        
+
         for (File file : listOfFiles) {
             String name = file.getName();
-            System.out.println(name);
             BankCard card = (BankCard) readObject(name, (Class<T>) BankCard.class);
-            cards.add(card);
+            System.out.println(card.getCardNumber());
+            boolean add = cards.add(card);
+            System.out.println(add);
         }
         return cards;
     }

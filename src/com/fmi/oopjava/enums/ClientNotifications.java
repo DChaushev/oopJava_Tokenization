@@ -28,7 +28,8 @@ public enum ClientNotifications {
         this.message = message;
     }
 
-    public String getMessage() {
+    @Override
+    public String toString() {
         return this.message;
     }
 

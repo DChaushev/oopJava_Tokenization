@@ -7,9 +7,9 @@ package com.fmi.oopjava.client;
 
 import com.fmi.oopjava.interfaces.Storable;
 import java.io.Serializable;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -29,7 +29,7 @@ public class Client implements Serializable, Storable {
         setName(name);
         setUsername(username);
         setPassword(password);
-        cards = new HashSet<>();
+        cards = new TreeSet<>();
     }
 
     public void addCard(String card) throws UnsupportedOperationException {

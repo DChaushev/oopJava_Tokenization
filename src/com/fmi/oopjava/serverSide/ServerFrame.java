@@ -8,6 +8,8 @@ package com.fmi.oopjava.serverSide;
 import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.RegularExpressions;
+import com.fmi.oopjava.enums.ServerName;
+import com.fmi.oopjava.enums.ServerNotifications;
 import java.awt.event.ItemEvent;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -16,7 +18,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,8 +54,7 @@ public class ServerFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         panelGenerateOutput = new javax.swing.JPanel();
-        btnOutTokens = new javax.swing.JButton();
-        btnOutCards = new javax.swing.JButton();
+        btnGenerateOutput = new javax.swing.JButton();
         lblNotifications = new javax.swing.JLabel();
         toggleServer = new javax.swing.JToggleButton();
 
@@ -114,34 +114,28 @@ public class ServerFrame extends javax.swing.JFrame {
 
         tabAddUser.addTab("Add User", panelAddUser);
 
-        btnOutTokens.setText("Sorted by Tokens");
-        btnOutTokens.addActionListener(new java.awt.event.ActionListener() {
+        btnGenerateOutput.setText("Generate Output");
+        btnGenerateOutput.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnOutTokensActionPerformed(evt);
+                btnGenerateOutputActionPerformed(evt);
             }
         });
-
-        btnOutCards.setText("Sorted by Cards");
 
         javax.swing.GroupLayout panelGenerateOutputLayout = new javax.swing.GroupLayout(panelGenerateOutput);
         panelGenerateOutput.setLayout(panelGenerateOutputLayout);
         panelGenerateOutputLayout.setHorizontalGroup(
             panelGenerateOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGenerateOutputLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelGenerateOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnOutTokens, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnOutCards, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addGap(129, 129, 129)
+                .addComponent(btnGenerateOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(129, Short.MAX_VALUE))
         );
         panelGenerateOutputLayout.setVerticalGroup(
             panelGenerateOutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelGenerateOutputLayout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addComponent(btnOutTokens)
-                .addGap(41, 41, 41)
-                .addComponent(btnOutCards)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addGap(95, 95, 95)
+                .addComponent(btnGenerateOutput)
+                .addContainerGap(98, Short.MAX_VALUE))
         );
 
         tabAddUser.addTab("Generate Output", panelGenerateOutput);
@@ -191,24 +185,24 @@ public class ServerFrame extends javax.swing.JFrame {
         String userName = txtUsername.getText();
         char[] password = txtPassword.getPassword();
 
-        if (userName.matches(RegularExpressions.VALIDATE_USERNAME.getRegex()) && new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.getRegex())) {
+        if (userName.matches(RegularExpressions.VALIDATE_USERNAME.toString()) && new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString())) {
 
             if (!server.userExists(userName)) {
 
                 try {
                     Client client = new Client(name, userName, password);
-                    lblNotifications.setText("User added!");
+                    lblNotifications.setText(ServerNotifications.USER_ADDED.toString());
                     clearUserFields();
                     server.serializeObject(client);
                 } catch (RemoteException ex) {
                     Logger.getLogger(ServerFrame.class.getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
-                lblNotifications.setText("User already exists!");
+                lblNotifications.setText(ServerNotifications.USER_ALREADY_EXISTS.toString());
             }
 
         } else {
-            lblNotifications.setText("Invalid credentials format!");
+            lblNotifications.setText(ServerNotifications.INVALID_CREDENTIALS.toString());
         }
 
     }//GEN-LAST:event_btnAddUserActionPerformed
@@ -221,9 +215,11 @@ public class ServerFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_toggleServerItemStateChanged
 
-    private void btnOutTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOutTokensActionPerformed
-
-    }//GEN-LAST:event_btnOutTokensActionPerformed
+    private void btnGenerateOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateOutputActionPerformed
+        if(!server.generateOutput()){
+            lblNotifications.setText(ServerNotifications.NO_CARDS.toString());
+        }
+    }//GEN-LAST:event_btnGenerateOutputActionPerformed
 
     /**
      * @param args the command line arguments
@@ -262,8 +258,7 @@ public class ServerFrame extends javax.swing.JFrame {
     private Server server = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
-    private javax.swing.JButton btnOutCards;
-    private javax.swing.JButton btnOutTokens;
+    private javax.swing.JButton btnGenerateOutput;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -282,7 +277,9 @@ public class ServerFrame extends javax.swing.JFrame {
             reg = LocateRegistry.createRegistry(1099);
             Registry registry = LocateRegistry.getRegistry();
             server = new Server();
-            Naming.rebind("//localhost/remoteServer", server);
+            Naming.rebind("//localhost/" + ServerName.NAME.toString(), server);
+            System.out.println(registry);
+            System.out.println(reg);
         } catch (RemoteException | MalformedURLException e) {
             e.printStackTrace();
         }
@@ -292,8 +289,8 @@ public class ServerFrame extends javax.swing.JFrame {
 
     private void stopServer() {
         try {
+            Naming.unbind("//localhost/" + ServerName.NAME.toString());
             server = null;
-            Naming.unbind("//localhost/remoteServer");
             if (reg != null) {
                 UnicastRemoteObject.unexportObject(reg, false);
             }
@@ -312,13 +309,11 @@ public class ServerFrame extends javax.swing.JFrame {
 
     private void disableButtons() {
         btnAddUser.setEnabled(false);
-        btnOutCards.setEnabled(false);
-        btnOutTokens.setEnabled(false);
+        btnGenerateOutput.setEnabled(false);
     }
 
     private void enableButtons() {
         btnAddUser.setEnabled(true);
-        btnOutCards.setEnabled(true);
-        btnOutTokens.setEnabled(true);
+        btnGenerateOutput.setEnabled(true);
     }
 }

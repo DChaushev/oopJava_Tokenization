@@ -6,6 +6,7 @@
 package com.fmi.oopjava.serverProxy;
 
 import com.fmi.oopjava.client.Client;
+import com.fmi.oopjava.enums.ServerName;
 import com.fmi.oopjava.interfaces.RemoteServer;
 import com.fmi.oopjava.interfaces.Storable;
 import java.rmi.NotBoundException;
@@ -30,7 +31,7 @@ public class ServerProxy implements RemoteServer {
     public void connect() {
         try {
             registry = LocateRegistry.getRegistry();
-            server = (RemoteServer) registry.lookup("remoteServer");
+            server = (RemoteServer) registry.lookup(ServerName.NAME.toString());
             isRunning = true;
         } catch (RemoteException | NotBoundException ex) {
             isRunning = false;

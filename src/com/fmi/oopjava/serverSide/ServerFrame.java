@@ -5,7 +5,6 @@
  */
 package com.fmi.oopjava.serverSide;
 
-import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.RegularExpressions;
 import com.fmi.oopjava.enums.ServerName;
@@ -59,6 +58,7 @@ public class ServerFrame extends javax.swing.JFrame {
         toggleServer = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Tokenization Server");
 
         btnAddUser.setText("Add User");
         btnAddUser.addActionListener(new java.awt.event.ActionListener() {

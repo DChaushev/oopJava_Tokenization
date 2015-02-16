@@ -5,6 +5,7 @@
     <password>1234aa</password>
     <cards>
       <string>4754091041477562</string>
+      <string>4563960122019991</string>
     </cards>
   </com.fmi.oopjava.client.Client>
 </object-stream>

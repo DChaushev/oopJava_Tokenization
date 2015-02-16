@@ -15,7 +15,7 @@ public class CardNumberValidator {
 
     public static boolean isValid(String cardNumber) {
 
-        if (cardNumber == null || cardNumber.equals("") || !isValidFirstDigit(cardNumber)) {
+        if (cardNumber == null || cardNumber.equals("") || cardNumber.length() != 16 || !isValidFirstDigit(cardNumber)) {
             return false;
         }
 

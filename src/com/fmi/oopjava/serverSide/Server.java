@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 /**
  *
@@ -37,6 +36,8 @@ public class Server<T>
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
         online = new HashSet<>();
+        
+        collectCardNumbers();
     }
 
     @Override
@@ -64,21 +65,24 @@ public class Server<T>
         allTokens.add(token);
 
         tokenMap.put(token, cardNumber);
-  
+
         return token;
     }
 
     @Override
-    public String getCardNumber(String token) {
+    public String getCardNumber(String token, Client client) {
         System.out.println(tokenMap);
         if (tokenMap.containsKey(token)) {
-            return tokenMap.get(token);
+            String cardNumber = tokenMap.get(token);
+            if (client.hasCard(cardNumber)) {
+                return tokenMap.get(token);
+            }
         }
         return null;
     }
 
     public String getAllTokens(String cardNumber) throws RemoteException {
-        
+
         return null;
     }
 
@@ -122,17 +126,28 @@ public class Server<T>
     boolean userExists(String username) {
         return storer.clientExists(username);
     }
-    
+
     boolean generateOutput() {
-    
+
         Set<BankCard> allCards = storer.getAllCards();
-        if(allCards.isEmpty()){
+        if (allCards.isEmpty()) {
             return false;
         }
-        
+
         TxtOutputWriter.writeOutput(allCards);
-        
+
         return true;
-        
+
+    }
+
+    private void collectCardNumbers() {
+        Set<BankCard> cards = storer.getAllCards();
+        for (BankCard card : cards) {
+            Set<String> tokens = card.getTokens();
+            for (String token : tokens) {
+                tokenMap.put(token, card.getCardNumber());
+                allTokens.add(token);
+            }
+        }
     }
 }

@@ -56,8 +56,8 @@ public class ServerProxy implements RemoteServer {
     }
 
     @Override
-    public String getCardNumber(String token) throws RemoteException {
-        return server.getCardNumber(token);
+    public String getCardNumber(String token, Client client) throws RemoteException {
+        return server.getCardNumber(token, client);
     }
 
     @Override

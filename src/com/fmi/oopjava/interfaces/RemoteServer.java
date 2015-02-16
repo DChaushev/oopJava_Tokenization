@@ -19,7 +19,7 @@ public interface RemoteServer<T> extends Remote{
     
     public String generateToken(String cardNumber) throws RemoteException;
     
-    public String getCardNumber(String token) throws RemoteException;
+    public String getCardNumber(String token, Client client) throws RemoteException;
     
     public boolean cardExists(String cardNumber) throws RemoteException;
     

@@ -1,15 +1,8 @@
 <object-stream>
   <com.fmi.oopjava.client.Client>
-    <name>Dimitar</name>
+    <name>Mitko</name>
     <username>mitko</username>
     <password>1234aa</password>
-    <cards>
-      <string>5500005555555559</string>
-      <string>4754091041477562</string>
-      <string>5382747298587810</string>
-      <string>4485752369186558</string>
-      <string>4563960122019991</string>
-      <string>6011239919537413</string>
-    </cards>
+    <cards class="sorted-set"/>
   </com.fmi.oopjava.client.Client>
 </object-stream>

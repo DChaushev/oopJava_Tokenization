@@ -39,6 +39,7 @@ public class ServerProxy implements RemoteServer {
     public void connect() {
         try {
             registry = LocateRegistry.getRegistry();
+            //registry = LocateRegistry.getRegistry("192.168.1.107", 1099);
             server = (RemoteServer) registry.lookup(ServerName.NAME.toString());
             isRunning = true;
         } catch (RemoteException | NotBoundException ex) {

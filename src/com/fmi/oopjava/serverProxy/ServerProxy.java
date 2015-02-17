@@ -20,7 +20,7 @@ import java.rmi.registry.Registry;
  */
 public class ServerProxy implements RemoteServer {
 
-    private RemoteServer server = null;
+    private RemoteServer server;
     private Registry registry;
     private boolean isRunning;
 
@@ -35,7 +35,7 @@ public class ServerProxy implements RemoteServer {
             isRunning = true;
         } catch (RemoteException | NotBoundException ex) {
             isRunning = false;
-            //ex.printStackTrace();
+            ex.printStackTrace();
         }
     }
 
@@ -63,21 +63,6 @@ public class ServerProxy implements RemoteServer {
     @Override
     public void serializeObject(Storable obj) throws RemoteException {
         server.serializeObject(obj);
-    }
-
-    @Override
-    public void logout(Client client) throws RemoteException {
-        server.logout(client);
-    }
-
-    @Override
-    public boolean isLogged(Client client) throws RemoteException {
-        return server.isLogged(client);
-    }
-
-    @Override
-    public void login(Client client) throws RemoteException {
-        server.login(client);
     }
 
     @Override

@@ -276,7 +276,7 @@ public class ServerFrame extends javax.swing.JFrame {
         try {
             reg = LocateRegistry.createRegistry(1099);
             Registry registry = LocateRegistry.getRegistry();
-            server = new Server();
+            server = Server.getInstance();
             Naming.rebind("//localhost/" + ServerName.NAME.toString(), server);
             System.out.println(registry);
             System.out.println(reg);

@@ -26,18 +26,28 @@ import java.util.TreeMap;
 public class Server<T>
         extends UnicastRemoteObject implements RemoteServer {
 
+    private static Server server;
     private final Storer storer;
     private final Map<String, String> tokenMap;
     private final Set<String> allTokens;
-    private final Set<String> online;
 
-    public Server() throws RemoteException {
+    private Server() throws RemoteException {
         storer = new Storer();
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
-        online = new HashSet<>();
-        
+
         collectCardNumbers();
+    }
+
+    public static Server getInstance() throws RemoteException {
+        if (server == null) {
+            synchronized (Server.class) {
+                if (server == null) {
+                    server = new Server();
+                }
+            }
+        }
+        return server;
     }
 
     @Override
@@ -55,13 +65,13 @@ public class Server<T>
     @Override
     public String generateToken(String cardNumber) {
         String token;
-        boolean check = false;
+        boolean tokenAlreadyExists = false;
         do {
             token = TokenGenerator.generateToken(cardNumber);
             if (!allTokens.contains(token)) {
-                check = true;
+                tokenAlreadyExists = true;
             }
-        } while (!check);
+        } while (!tokenAlreadyExists);
         allTokens.add(token);
 
         tokenMap.put(token, cardNumber);
@@ -81,31 +91,9 @@ public class Server<T>
         return null;
     }
 
-    public String getAllTokens(String cardNumber) throws RemoteException {
-
-        return null;
-    }
-
     @Override
     public boolean isUp() throws RemoteException {
         return true;
-    }
-
-    @Override
-    public void logout(Client client) {
-        if (online.contains(client.getUsername())) {
-            online.remove(client.getUsername());
-        }
-    }
-
-    @Override
-    public boolean isLogged(Client client) throws RemoteException {
-        return online.contains(client.getUsername());
-    }
-
-    @Override
-    public void login(Client client) throws RemoteException {
-        online.add(client.getUsername());
     }
 
     @Override
@@ -133,11 +121,8 @@ public class Server<T>
         if (allCards.isEmpty()) {
             return false;
         }
-
         TxtOutputWriter.writeOutput(allCards);
-
         return true;
-
     }
 
     private void collectCardNumbers() {

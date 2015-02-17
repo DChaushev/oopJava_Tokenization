@@ -11,7 +11,10 @@ package com.fmi.oopjava.enums;
  */
 public enum ServerNotifications {
 
-    NO_CARDS("No cards!"), INVALID_CREDENTIALS("Invalid credentials format!"), USER_ALREADY_EXISTS("User already exists!"), USER_ADDED("User added!");
+    NO_CARDS("No cards!"),
+    INVALID_CREDENTIALS("Invalid credentials format!"),
+    USER_ALREADY_EXISTS("User already exists!"),
+    USER_ADDED("User added!");
 
     private final String message;
 

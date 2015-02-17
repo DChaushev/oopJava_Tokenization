@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.txtOutputWriter;
 
 import com.fmi.oopjava.bankCard.BankCard;
@@ -14,7 +9,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * One of the requests of the task is to have the functionality of outputting
+ * Card number - tokens table in .txt file.
+ * 
+ * This class is doing just that.
+ * It takes all the cards from the XML files, generates the output and writes it
+ * in a file, called -current_time-.txt in /TokensOutput folder.
+ * 
  * @author Dimitar
  */
 public class TxtOutputWriter {

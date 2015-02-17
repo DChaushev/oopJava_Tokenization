@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.serverSide;
 
 import com.fmi.oopjava.bankCard.BankCard;
@@ -20,7 +15,12 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- *
+ * The Server class.
+ * It implements all the methods from the RemoteServer interface.
+ * In the interface I've described what each method is for.
+ * 
+ * Plus it has a couple more package private methods, used from the admin panel.
+ * 
  * @author Dimitar
  */
 public class Server<T>
@@ -53,7 +53,7 @@ public class Server<T>
     @Override
     public boolean validateCredentials(String username, char[] password) {
 
-        if (Storer.clientExists(username)) {
+        if (storer.objectExists(username, Client.class)) {
             Client client = (Client) storer.readObject(username, Client.class);
             if (client != null && client.checkPassword(password)) {
                 return true;
@@ -108,11 +108,11 @@ public class Server<T>
 
     @Override
     public boolean cardExists(String cardNumber) throws RemoteException {
-        return storer.cardExists(cardNumber);
+        return storer.objectExists(cardNumber, BankCard.class);
     }
 
     boolean userExists(String username) {
-        return storer.clientExists(username);
+        return storer.objectExists(username, Client.class);
     }
 
     boolean generateOutput() {

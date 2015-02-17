@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.xmlSerializor;
 
 import com.fmi.oopjava.bankCard.BankCard;
@@ -23,7 +18,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
+ * This class can write/read object to/from XML files.
+ * For writing the objects must have implemented the Storable interface.
+ * 
  * @author Dimitar
  */
 public class Storer<T> {
@@ -31,6 +28,15 @@ public class Storer<T> {
     public final static String CLIENTS_FOLDER = "./XML_users";
     public final static String CARDS_FOLDER = "./XML_cards";
 
+    
+    /**
+     * The writeObject method is taking a Storable object and objectType as argument.
+     * The type is needed so it knows in which folder to store the XML file.
+     * This method is also synchronized, because we don't want to write the same objects at once.
+     * 
+     * @param obj
+     * @param objType 
+     */
     public synchronized void writeObject(Storable obj, Class<T> objType) {
 
         XStream xstream = new XStream();
@@ -47,6 +53,14 @@ public class Storer<T> {
         }
     }
 
+    /**
+     * readIbject method deserializes an object by given fileName and object type.
+     * The type is also needed so it knows in which folder to look for the file.
+     * 
+     * @param fileName
+     * @param objType
+     * @return the read object.
+     */
     public T readObject(String fileName, Class<T> objType) {
 
         XStream xstream = new XStream();
@@ -73,6 +87,13 @@ public class Storer<T> {
 
     }
 
+    /**
+     * private method that by given object type gives us the folder, the file
+     * we are searching for should be.
+     * 
+     * @param objType
+     * @return 
+     */
     private String getFolder(Class<T> objType) {
         String folder;
         if (objType == Client.class) {
@@ -83,14 +104,14 @@ public class Storer<T> {
         return folder;
     }
 
-    public static boolean clientExists(String username) {
-        File file = new File(CLIENTS_FOLDER + "/" + username + ".xml");
-        return file.exists();
-    }
-
-    public boolean cardExists(String cardNumber) {
-        File file = new File(CARDS_FOLDER + "/" + cardNumber + ".xml");
-        return file.exists();
+    /* I think the methods bellow are pretty understandable by their names:
+     *      - The objectExists tells us if such client/card exists.
+     *      - The getAllCards() iterates over the cards in the cards folder and
+              returns a set of BankCards.
+     */
+    
+    public boolean objectExists(String fileName, Class<T> objType){
+        return new File(this.getFolder(objType) + "/" + fileName + ".xml").exists();
     }
 
     public Set<BankCard> getAllCards() {

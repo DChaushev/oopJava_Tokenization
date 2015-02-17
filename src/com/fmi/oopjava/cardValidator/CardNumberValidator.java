@@ -1,12 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.cardValidator;
 
 /**
- *
+ * We are using Luhn's algorithm to validate the card numbers given.
+ * The algorithm states that one card is valid if:
+ *      - it starts with 3, 4, 5 or 6
+ *      - We reverse the digits...
+ *         - ...and take the first, third and every other odd digit,
+ *           sum them to form s1.
+ *         - ...then for every second digit, we..
+ *              - multiply the digit by 2 and sum the digit if the answer is greater than 9
+ *                to form partial sums for the even digits
+ *              - sum the partial sums of the even digits to form s2
+ *         - If s1 + s2 ends in zero, then the original number is a valid bank
+ *           card number!
+ * 
+ * Example:
+ *  card number: 49927398716
+ *  reverse it:  61789372994
+ *  Sum the odd digits:
+ *      6 + 7 + 9 + 7 + 9 + 4 = 42 = s1
+ *  Then for the even ones:
+ *      1,  8,  3,  2,  9
+ *  Two times each even digit:
+ *      2, 16,  6,  4, 18
+ *  Sum the digits of each multiplication:
+ *      2,  7,  6,  4,  9
+ *  Sum the last:
+ *       2 + 7 + 6 + 4 + 9 = 28 = s2
+ * 
+ *  s1 + s2 = 70 which ends in zero which means that 49927398716 passes the Luhn's test
+ * 
  * @author Dimitar
  */
 public class CardNumberValidator {

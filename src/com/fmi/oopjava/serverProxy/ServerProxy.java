@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.serverProxy;
 
 import com.fmi.oopjava.client.Client;
@@ -15,7 +10,20 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 /**
- *
+ * As mentioned somewhere else, we are using the Proxy Pattern.
+ * So this class plays the role of the Proxy for connecting the actual server.
+ * Both this class and the server are implementing the RemoteServer interface.
+ * 
+ * The class has three properties:
+ *      - It holds an instance of the Server;
+ *      - An instance of the registry where the server is binded.
+ *      - And a boolean variable that says if the server is running or not.
+ * 
+ * It implements all the methods from the RemoteServer interface:
+ *      - It just forwards them to the actual server.
+ * Plus one more method:
+ *      - connect(), which is establishing the connection with the server.
+ * 
  * @author Dimitar
  */
 public class ServerProxy implements RemoteServer {

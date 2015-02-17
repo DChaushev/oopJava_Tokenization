@@ -1,0 +1,8 @@
+<object-stream>
+  <com.fmi.oopjava.bankCard.BankCard>
+    <cardNumber>5500005555555559</cardNumber>
+    <tokens class="sorted-set">
+      <string>1189996717185559</string>
+    </tokens>
+  </com.fmi.oopjava.bankCard.BankCard>
+</object-stream>

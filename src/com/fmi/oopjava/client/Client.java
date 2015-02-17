@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.fmi.oopjava.client;
 
 import com.fmi.oopjava.interfaces.Storable;
@@ -12,13 +7,27 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- *
+ * Client class has four properties:
+ *      - name - the actual name of the client.
+ *      - username - the username the client uses to log-in. This is unique property.
+ *        Clients are compared by their usernames.
+ *      - password - no need to say what that one is.
+ *      - each client holds a set of their bank cards, but we are not using the
+ *        BankCard class to represent that one, but Strings. Because the BankCard class
+ *        holds also the tokens of each card. We want to be more cautious, so just
+ *        Strings, the server knows how to get the tokens from a String.
+ * 
+ * The Client class is implementing Serializable for the same reasons as the BankCard class:
+ *      - network transfer
+ *      - serializing as XML
+ * 
+ * Storable - because it will be stored as XML file.
+ * 
  * @author Dimitar
  */
 public class Client implements Serializable, Storable {
 
     private String name;
-
     private String username;
     private char[] password;
     

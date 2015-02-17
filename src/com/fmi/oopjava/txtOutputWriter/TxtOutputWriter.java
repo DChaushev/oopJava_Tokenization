@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class TxtOutputWriter {
 
-    private static final String OUTPUT_FOLDER = "./TokensOutput";
+    public static final String OUTPUT_FOLDER = "./TokensOutput";
 
     public static void writeOutput(Set<BankCard> cards) {
 

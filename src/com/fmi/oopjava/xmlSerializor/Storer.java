@@ -4,6 +4,7 @@ import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.interfaces.Storable;
 import com.fmi.oopjava.serverSide.Server;
+import com.fmi.oopjava.txtOutputWriter.TxtOutputWriter;
 import com.thoughtworks.xstream.XStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -12,6 +13,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.logging.Level;
@@ -128,5 +132,19 @@ public class Storer<T> {
             System.out.println(add);
         }
         return cards;
+    }
+
+    public void createFolders() {
+        List<String> folders = new LinkedList<>();
+        folders.add(CARDS_FOLDER);
+        folders.add(CLIENTS_FOLDER);
+        folders.add(TxtOutputWriter.OUTPUT_FOLDER);
+        
+        for (String folder : folders) {
+            File f = new File(folder);
+            if(!f.exists()){
+                f.mkdir();
+            }
+        }
     }
 }

@@ -36,6 +36,7 @@ public class Server<T>
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
 
+        createFolders();
         collectCardNumbers();
     }
 
@@ -134,5 +135,9 @@ public class Server<T>
                 allTokens.add(token);
             }
         }
+    }
+
+    private void createFolders() {
+        storer.createFolders();
     }
 }

@@ -12,7 +12,9 @@ package com.fmi.oopjava.enums;
 public enum RegularExpressions {
     
     VALIDATE_USERNAME("[a-z0-9_]{3,16}"),
-    VALIDATE_PASSWORD("((?=.*\\d)(?=.*[a-z]).{6,20})");
+    VALIDATE_PASSWORD("((?=.*\\d)(?=.*[a-z]).{6,20})"),
+    VALIDATE_CARD_NUMBER("[3,4,5,6]{1}[0-9]{15}"),
+    VALIDATE_TOKEN("[0,1,2,7,8,9]{1}[0-9]{15}");
     
     private final String regex;
 

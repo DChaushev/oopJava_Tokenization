@@ -267,7 +267,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        if(!server.isUp()){
+        if (!server.isUp()) {
             attemptConnection();
             return;
         }
@@ -316,6 +316,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
                 String token = server.generateToken(cardNumber);
                 txtGetToken.setText(token);
+                lblTokenNotifications.setText(ClientNotifications.TOKENIZATION_SUCCESSFULL.toString());
                 card.addToken(token);
                 server.serializeObject(card);
             } catch (RemoteException ex) {
@@ -330,19 +331,25 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
     private void btnGetCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetCardActionPerformed
         String token = txtEnterToken.getText();
-        try {
-            String cardNumber = server.getCardNumber(token, client);
+        if (token.matches(RegularExpressions.VALIDATE_TOKEN.toString())) {
+            try {
+                String cardNumber = server.getCardNumber(token, client);
 
-            if (cardNumber != null) {
-                lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.toString());
-                txtGetCard.setText(cardNumber);
-            } else {
-                lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.toString());
+                if (cardNumber != null) {
+                    lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.toString());
+                    txtGetCard.setText(cardNumber);
+                } else {
+                    lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.toString());
+                }
+
+            } catch (RemoteException ex) {
+                Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } catch (RemoteException ex) {
-            Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        else{
+            lblTokenNotifications.setText(ClientNotifications.INVALID_TOKEN_FORMAT.toString());
+        }
+        
     }//GEN-LAST:event_btnGetCardActionPerformed
 
     /**
@@ -442,7 +449,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
     private void attemptConnection() {
         new Thread(() -> {
-           server.connect();
+            server.connect();
         });
         lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
     }

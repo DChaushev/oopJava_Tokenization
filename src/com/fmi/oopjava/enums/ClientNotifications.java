@@ -11,6 +11,7 @@ public enum ClientNotifications {
     INVALID_PASSWORD_FORMAT("Invalid password format!"),
     INVALID_CREDENTIALS("Invalida username or password!"),
     INVALID_CARD_NUMBER("Invalid Card Number!"),
+    INVALID_TOKEN_FORMAT("Invalid token!"),
     TOKENIZATION_SUCCESSFULL("Tokenization successful!"),
     CARD_FOUND("Card Number found!"),
     NO_TOKEN("No such token!"),

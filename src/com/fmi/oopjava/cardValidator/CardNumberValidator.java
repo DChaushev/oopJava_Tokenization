@@ -1,5 +1,7 @@
 package com.fmi.oopjava.cardValidator;
 
+import com.fmi.oopjava.enums.RegularExpressions;
+
 /**
  * We are using Luhn's algorithm to validate the card numbers given.
  * The algorithm states that one card is valid if:
@@ -34,11 +36,9 @@ package com.fmi.oopjava.cardValidator;
  */
 public class CardNumberValidator {
 
-    private static final char[] validStartingDigits = {'3', '4', '5', '6'};
-
     public static boolean isValid(String cardNumber) {
 
-        if (cardNumber == null || cardNumber.equals("") || cardNumber.length() != 16 || !isValidFirstDigit(cardNumber)) {
+        if (cardNumber == null || !cardNumber.matches(RegularExpressions.VALIDATE_CARD_NUMBER.toString())) {
             return false;
         }
 
@@ -57,14 +57,4 @@ public class CardNumberValidator {
         }
         return (s1 + s2) % 10 == 0;
     }
-
-    private static boolean isValidFirstDigit(String cardNumber) {
-        for (int i = 0; i < validStartingDigits.length; i++) {
-            if (cardNumber.charAt(0) == validStartingDigits[i]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }

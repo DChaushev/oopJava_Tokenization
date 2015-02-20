@@ -54,11 +54,6 @@ public class Server<T>
 
     @Override
     public String generateToken(String cardNumber) {
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
         String token;
         boolean tokenAlreadyExists = false;
         do {

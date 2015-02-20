@@ -268,16 +268,16 @@ public class ClientMainFrame extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         try {
-            
+
             attemptConnection();
-            
+
             if (loginSuccessfully()) {
                 lblLoginNotifications.setText(" ");
                 changePanels(TokenizationPanel, LoginPanel);
                 lblGreetings.setText(String.format("Hello, %s", client.getName()));
                 lblTokenNotifications.setText(" ");
             }
-            
+
         } catch (RemoteException ex) {
             lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
             //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -300,7 +300,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
     private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTokenActionPerformed
         String cardNumber = txtEnterCard.getText();
         BankCard card = null;
-        
+
         if (CardNumberValidator.isValid(cardNumber)) {
             try {
                 if (server.cardExists(cardNumber)) {
@@ -317,7 +317,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                     client.addCard(cardNumber);
                     server.serializeObject(client);
                 }
-                
+
                 String token = server.generateToken(cardNumber);
                 txtGetToken.setText(token);
                 lblTokenNotifications.setText(ClientNotifications.TOKENIZATION_SUCCESSFULL.toString());
@@ -327,7 +327,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                 lblTokenNotifications.setText(ClientNotifications.CONNECTION_LOST.toString());
                 //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } else {
             lblTokenNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.toString());
             return;
@@ -339,14 +339,14 @@ public class ClientMainFrame extends javax.swing.JFrame {
         if (token.matches(RegularExpressions.VALIDATE_TOKEN.toString())) {
             try {
                 String cardNumber = server.getCardNumber(token, client);
-                
+
                 if (cardNumber != null) {
                     lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.toString());
                     txtGetCard.setText(cardNumber);
                 } else {
                     lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.toString());
                 }
-                
+
             } catch (RemoteException ex) {
                 lblTokenNotifications.setText(ClientNotifications.CONNECTION_LOST.toString());
                 //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -389,7 +389,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
             new ClientMainFrame().setVisible(true);
         });
     }
-    
+
     private Client client = null;
     private RemoteServer server = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -423,39 +423,39 @@ public class ClientMainFrame extends javax.swing.JFrame {
         hide.setVisible(false);
         show.setVisible(true);
     }
-    
+
     private boolean loginSuccessfully() throws RemoteException {
-        
+
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
-        
+
+        if (!username.matches(RegularExpressions.VALIDATE_USERNAME.toString())) {
+            lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.toString());
+            return false;
+        }
+        if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString()))) {
+            lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.toString());
+            return false;
+        }
+
         try {
-            
-            if (!username.matches(RegularExpressions.VALIDATE_USERNAME.toString())) {
-                lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.toString());
-                return false;
-            }
-            if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString()))) {
-                lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.toString());
-                return false;
-            }
-            
             if (server.validateCredentials(username, password)) {
                 setClient(username);
             } else {
                 lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.toString());
                 return false;
             }
-        } catch (RemoteException ex) {
-            throw ex;
+        }catch(NullPointerException ex){
+            lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
+            return false;
         }
         return true;
     }
-    
+
     private void setClient(String username) throws RemoteException {
         client = (Client) server.deserializeObject(username, Client.class);
     }
-    
+
     private void attemptConnection() {
         new Thread(() -> {
             try {
@@ -466,7 +466,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
             }
         }).start();
     }
-    
+
     private void clearFields() {
         txtEnterCard.setText("");
         txtEnterToken.setText("");

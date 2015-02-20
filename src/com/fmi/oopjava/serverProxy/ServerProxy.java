@@ -52,7 +52,7 @@ public final class ServerProxy implements RemoteServer {
     }
 
     @Override
-    public boolean validateCredentials(String username, char[] password) throws RemoteException {
+    public boolean validateCredentials(String username, char[] password) throws RemoteException, NullPointerException {
         return server.validateCredentials(username, password);
     }
 

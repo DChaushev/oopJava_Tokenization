@@ -8,6 +8,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * As mentioned somewhere else, we are using the Proxy Pattern.
@@ -26,32 +28,27 @@ import java.rmi.registry.Registry;
  * 
  * @author Dimitar
  */
-public class ServerProxy implements RemoteServer {
+public final class ServerProxy implements RemoteServer {
 
     private RemoteServer server;
     private Registry registry;
     private boolean isRunning;
 
     public ServerProxy() {
-        connect();
-    }
-
-    public void connect() {
-        try {
-            registry = LocateRegistry.getRegistry();
-            //registry = LocateRegistry.getRegistry("192.168.1.107", 1099);
-            server = (RemoteServer) registry.lookup(ServerName.NAME.toString());
-            isRunning = true;
-        } catch (RemoteException | NotBoundException ex) {
-            isRunning = false;
-            ex.printStackTrace();
-        }
+        connectToServer();
     }
 
     @Override
-    public boolean isUp() {
-        connect();
-        return isRunning;
+    public void connectToServer() {
+        try {
+            System.out.println("connecting...");
+            registry = LocateRegistry.getRegistry();
+            server = (RemoteServer) registry.lookup(ServerName.NAME.toString());
+            System.out.println("connection successfull");
+        } catch (RemoteException | NotBoundException ex) {
+            //Logger.getLogger(ServerProxy.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("connection failed");
+        }
     }
 
     @Override

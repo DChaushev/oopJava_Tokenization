@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.clientPanels;
+package com.fmi.oopjava.client;
 
 import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.cardValidator.CardNumberValidator;
-import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.ClientNotifications;
 import com.fmi.oopjava.enums.RegularExpressions;
+import com.fmi.oopjava.interfaces.RemoteServer;
 import com.fmi.oopjava.serverProxy.ServerProxy;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -267,18 +267,20 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        if (!server.isUp()) {
-            attemptConnection();
-            return;
-        }
         try {
+            
+            attemptConnection();
+            
             if (loginSuccessfully()) {
-                lblLoginNotifications.setText("");
+                lblLoginNotifications.setText(" ");
                 changePanels(TokenizationPanel, LoginPanel);
                 lblGreetings.setText(String.format("Hello, %s", client.getName()));
+                lblTokenNotifications.setText(" ");
             }
+            
         } catch (RemoteException ex) {
-            Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
+            //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -286,17 +288,19 @@ public class ClientMainFrame extends javax.swing.JFrame {
         try {
             server.serializeObject(client);
         } catch (RemoteException ex) {
-            Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            lblTokenNotifications.setText(ClientNotifications.CONNECTION_LOST.toString());
+            //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            clearFields();
+            client = null;
+            changePanels(LoginPanel, TokenizationPanel);
         }
-        clearFields();
-        client = null;
-        changePanels(LoginPanel, TokenizationPanel);
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTokenActionPerformed
         String cardNumber = txtEnterCard.getText();
         BankCard card = null;
-
+        
         if (CardNumberValidator.isValid(cardNumber)) {
             try {
                 if (server.cardExists(cardNumber)) {
@@ -313,16 +317,17 @@ public class ClientMainFrame extends javax.swing.JFrame {
                     client.addCard(cardNumber);
                     server.serializeObject(client);
                 }
-
+                
                 String token = server.generateToken(cardNumber);
                 txtGetToken.setText(token);
                 lblTokenNotifications.setText(ClientNotifications.TOKENIZATION_SUCCESSFULL.toString());
                 card.addToken(token);
                 server.serializeObject(card);
             } catch (RemoteException ex) {
-                Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                lblTokenNotifications.setText(ClientNotifications.CONNECTION_LOST.toString());
+                //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-
+            
         } else {
             lblTokenNotifications.setText(ClientNotifications.INVALID_CARD_NUMBER.toString());
             return;
@@ -334,22 +339,22 @@ public class ClientMainFrame extends javax.swing.JFrame {
         if (token.matches(RegularExpressions.VALIDATE_TOKEN.toString())) {
             try {
                 String cardNumber = server.getCardNumber(token, client);
-
+                
                 if (cardNumber != null) {
                     lblTokenNotifications.setText(ClientNotifications.CARD_FOUND.toString());
                     txtGetCard.setText(cardNumber);
                 } else {
                     lblTokenNotifications.setText(ClientNotifications.NO_TOKEN.toString());
                 }
-
+                
             } catch (RemoteException ex) {
-                Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                lblTokenNotifications.setText(ClientNotifications.CONNECTION_LOST.toString());
+                //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
+        } else {
             lblTokenNotifications.setText(ClientNotifications.INVALID_TOKEN_FORMAT.toString());
         }
-        
+
     }//GEN-LAST:event_btnGetCardActionPerformed
 
     /**
@@ -384,9 +389,9 @@ public class ClientMainFrame extends javax.swing.JFrame {
             new ClientMainFrame().setVisible(true);
         });
     }
-
+    
     private Client client = null;
-    private ServerProxy server = null;
+    private RemoteServer server = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LoginPanel;
     private javax.swing.JPanel TokenizationPanel;
@@ -418,42 +423,50 @@ public class ClientMainFrame extends javax.swing.JFrame {
         hide.setVisible(false);
         show.setVisible(true);
     }
-
+    
     private boolean loginSuccessfully() throws RemoteException {
-
+        
         String username = txtUsername.getText();
         char[] password = txtPassword.getPassword();
-
-        if (!username.matches(RegularExpressions.VALIDATE_USERNAME.toString())) {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.toString());
-            return false;
+        
+        try {
+            
+            if (!username.matches(RegularExpressions.VALIDATE_USERNAME.toString())) {
+                lblLoginNotifications.setText(ClientNotifications.INVALID_USERNAME_FORMAT.toString());
+                return false;
+            }
+            if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString()))) {
+                lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.toString());
+                return false;
+            }
+            
+            if (server.validateCredentials(username, password)) {
+                setClient(username);
+            } else {
+                lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.toString());
+                return false;
+            }
+        } catch (RemoteException ex) {
+            throw ex;
         }
-        if (!(new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString()))) {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_PASSWORD_FORMAT.toString());
-            return false;
-        }
-
-        if (server.validateCredentials(username, password)) {
-            setClient(username);
-        } else {
-            lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.toString());
-            return false;
-        }
-
         return true;
     }
-
+    
     private void setClient(String username) throws RemoteException {
         client = (Client) server.deserializeObject(username, Client.class);
     }
-
+    
     private void attemptConnection() {
         new Thread(() -> {
-            server.connect();
-        });
-        lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
+            try {
+                server.connectToServer();
+            } catch (RemoteException ex) {
+                lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
+                //Logger.getLogger(ClientMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }).start();
     }
-
+    
     private void clearFields() {
         txtEnterCard.setText("");
         txtEnterToken.setText("");

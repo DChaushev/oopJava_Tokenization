@@ -67,15 +67,6 @@ public interface RemoteServer<T> extends Remote{
     public boolean cardExists(String cardNumber) throws RemoteException;
     
     /**
-     * This method is telling us if the server isUp and running.
-     * When implemented on the actual server, it is always returning True.
-     * 
-     * @return
-     * @throws RemoteException 
-     */
-    public boolean isUp() throws RemoteException;
-    
-    /**
      * We are using this method to serialize object as XML files.
      * The objects must implement the Storable interface.
      * 
@@ -98,5 +89,12 @@ public interface RemoteServer<T> extends Remote{
      * @throws RemoteException 
      */
     public T deserializeObject(String fileName, Class objectType) throws RemoteException;
+
+    /**
+     * This method is used from the proxy server.
+     * It is redundant for this class.
+     * If I find a better way to do it, I will remove it.
+     */
+    public void connectToServer() throws RemoteException;
     
 }

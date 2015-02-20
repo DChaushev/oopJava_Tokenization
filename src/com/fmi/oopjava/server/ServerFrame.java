@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.fmi.oopjava.serverSide;
+package com.fmi.oopjava.server;
 
 import com.fmi.oopjava.client.Client;
 import com.fmi.oopjava.enums.RegularExpressions;
@@ -235,7 +235,7 @@ public class ServerFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_toggleServerItemStateChanged
 
     private void btnGenerateOutputActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateOutputActionPerformed
-        if(!server.generateOutput()){
+        if (!server.generateOutput()) {
             lblNotifications.setText(ServerNotifications.NO_CARDS.toString());
         }
     }//GEN-LAST:event_btnGenerateOutputActionPerformed
@@ -273,7 +273,7 @@ public class ServerFrame extends javax.swing.JFrame {
         });
     }
 
-    private Registry reg;
+    private Registry registry;
     private Server server = null;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
@@ -295,32 +295,35 @@ public class ServerFrame extends javax.swing.JFrame {
 
     private void startServer() {
         try {
-            reg = LocateRegistry.createRegistry(1099);
-            Registry registry = LocateRegistry.getRegistry();
-            server = Server.getInstance();
+            registry = LocateRegistry.createRegistry(1099);
+            server = new Server();
             Naming.rebind("//localhost/" + ServerName.NAME.toString(), server);
-            //Naming.rebind("//192.168.1.107/" + ServerName.NAME.toString(), server);
+            
             System.out.println(registry);
-            System.out.println(reg);
+
+            enableButtons();
+            System.out.println("Sever started!");
+
         } catch (RemoteException | MalformedURLException e) {
-            e.printStackTrace();
+            Logger.getLogger(ServerFrame.class.getName()).log(Level.SEVERE, null, e);
         }
-        enableButtons();
-        System.out.println("Sever started!");
     }
 
     private void stopServer() {
         try {
             Naming.unbind("//localhost/" + ServerName.NAME.toString());
+
+            UnicastRemoteObject.unexportObject(server, false);
+            UnicastRemoteObject.unexportObject(registry, false);
+            
             server = null;
-            if (reg != null) {
-                UnicastRemoteObject.unexportObject(reg, false);
-            }
+            disableButtons();
+
+            System.out.println("Sever stopped!");
+
         } catch (RemoteException | NotBoundException | MalformedURLException ex) {
             Logger.getLogger(ServerFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-        disableButtons();
-        System.out.println("Sever stopped!");
     }
 
     private void clearUserFields() {

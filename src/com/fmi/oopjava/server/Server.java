@@ -1,4 +1,4 @@
-package com.fmi.oopjava.serverSide;
+package com.fmi.oopjava.server;
 
 import com.fmi.oopjava.bankCard.BankCard;
 import com.fmi.oopjava.tokenGenerator.TokenGenerator;
@@ -13,42 +13,31 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * The Server class.
- * It implements all the methods from the RemoteServer interface.
- * In the interface I've described what each method is for.
- * 
+ * The Server class. It implements all the methods from the RemoteServer
+ * interface. In the interface I've described what each method is for.
+ *
  * Plus it has a couple more package private methods, used from the admin panel.
- * 
+ *
  * @author Dimitar
  */
 public class Server<T>
         extends UnicastRemoteObject implements RemoteServer {
 
-    private static Server server;
     private final Storer storer;
     private final Map<String, String> tokenMap;
     private final Set<String> allTokens;
 
-    private Server() throws RemoteException {
+    public Server() throws RemoteException {
         storer = new Storer();
         allTokens = new HashSet<>();
         tokenMap = new TreeMap<>();
 
         createFolders();
         collectCardNumbers();
-    }
-
-    public static Server getInstance() throws RemoteException {
-        if (server == null) {
-            synchronized (Server.class) {
-                if (server == null) {
-                    server = new Server();
-                }
-            }
-        }
-        return server;
     }
 
     @Override
@@ -65,6 +54,11 @@ public class Server<T>
 
     @Override
     public String generateToken(String cardNumber) {
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+        }
         String token;
         boolean tokenAlreadyExists = false;
         do {
@@ -90,11 +84,6 @@ public class Server<T>
             }
         }
         return null;
-    }
-
-    @Override
-    public boolean isUp() throws RemoteException {
-        return true;
     }
 
     @Override
@@ -139,5 +128,9 @@ public class Server<T>
 
     private void createFolders() {
         storer.createFolders();
+    }
+
+    @Override
+    public void connectToServer() {
     }
 }

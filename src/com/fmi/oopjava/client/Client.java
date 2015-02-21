@@ -7,22 +7,20 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Client class has four properties:
- *      - name - the actual name of the client.
- *      - username - the username the client uses to log-in. This is unique property.
- *        Clients are compared by their usernames.
- *      - password - no need to say what that one is.
- *      - each client holds a set of their bank cards, but we are not using the
- *        BankCard class to represent that one, but Strings. Because the BankCard class
- *        holds also the tokens of each card. We want to be more cautious, so just
- *        Strings, the server knows how to get the tokens from a String.
- * 
- * The Client class is implementing Serializable for the same reasons as the BankCard class:
- *      - network transfer
- *      - serializing as XML
- * 
+ * Client class has four properties: - name - the actual name of the client. -
+ * username - the username the client uses to log-in. This is unique property.
+ * Clients are compared by their usernames. - password - no need to say what
+ * that one is. - each client holds a set of their bank cards, but we are not
+ * using the BankCard class to represent that one, but Strings. Because the
+ * BankCard class holds also the tokens of each card. We want to be more
+ * cautious, so just Strings, the server knows how to get the tokens from a
+ * String.
+ *
+ * The Client class is implementing Serializable for the same reasons as the
+ * BankCard class: - network transfer - serializing as XML
+ *
  * Storable - because it will be stored as XML file.
- * 
+ *
  * @author Dimitar
  */
 public class Client implements Serializable, Storable {
@@ -30,14 +28,18 @@ public class Client implements Serializable, Storable {
     private String name;
     private String username;
     private char[] password;
-    
+
+    private boolean tokenizationRight;
+    private boolean gettingCardRights;
+
     private final Set<String> cards;
 
-
-    public Client(String name, String username, char[] password) {
+    public Client(String name, String username, char[] password, boolean tokenizationRight, boolean gettingCardRights) {
         setName(name);
         setUsername(username);
         setPassword(password);
+        setTokenizationRight(tokenizationRight);
+        setGettingCardRights(gettingCardRights);
         cards = new TreeSet<>();
     }
 
@@ -70,6 +72,22 @@ public class Client implements Serializable, Storable {
         return username;
     }
 
+    public boolean hasTokenizationRight() {
+        return tokenizationRight;
+    }
+
+    private void setTokenizationRight(boolean tokenizationRight) {
+        this.tokenizationRight = tokenizationRight;
+    }
+
+    public boolean hasGettingCardRights() {
+        return gettingCardRights;
+    }
+
+    private void setGettingCardRights(boolean gettingCardRights) {
+        this.gettingCardRights = gettingCardRights;
+    }
+
     public boolean checkPassword(char[] password) {
         if (password.length != this.password.length) {
             return false;
@@ -86,7 +104,6 @@ public class Client implements Serializable, Storable {
     public String toString() {
         return String.format("%s\n%s", name, username);
     }
-
 
     @Override
     public String getFileName() {
@@ -110,5 +127,5 @@ public class Client implements Serializable, Storable {
         hash = 67 * hash + Objects.hashCode(this.username);
         return hash;
     }
-    
+
 }

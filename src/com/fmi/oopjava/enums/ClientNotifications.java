@@ -17,7 +17,8 @@ public enum ClientNotifications {
     NO_TOKEN("No such token!"),
     ALREADY_LOGGED("You are already logged!"),
     FOREIGN_CARD("This is not your card!"),
-    CONNECTION_LOST("Connection to server lost!");
+    CONNECTION_LOST("Connection to server lost!"),
+    NO_RIGHTS("You are not authorized to do this!");
 
     private final String message;
 

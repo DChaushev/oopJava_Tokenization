@@ -54,6 +54,8 @@ public class ServerFrame extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        checkBoxTokenizationRights = new javax.swing.JCheckBox();
+        checkBoxGetCardRights = new javax.swing.JCheckBox();
         panelGenerateOutput = new javax.swing.JPanel();
         btnGenerateOutput = new javax.swing.JButton();
         lblNotifications = new javax.swing.JLabel();
@@ -80,6 +82,12 @@ public class ServerFrame extends javax.swing.JFrame {
 
         jLabel5.setText("The username contains only lowercase letters and digits. (3 - 16)");
 
+        checkBoxTokenizationRights.setSelected(true);
+        checkBoxTokenizationRights.setText("Tokenization Rights");
+
+        checkBoxGetCardRights.setSelected(true);
+        checkBoxGetCardRights.setText("Get Card Rights");
+
         javax.swing.GroupLayout panelAddUserLayout = new javax.swing.GroupLayout(panelAddUser);
         panelAddUser.setLayout(panelAddUserLayout);
         panelAddUserLayout.setHorizontalGroup(
@@ -87,25 +95,31 @@ public class ServerFrame extends javax.swing.JFrame {
             .addGroup(panelAddUserLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelAddUserLayout.createSequentialGroup()
-                        .addGap(0, 101, Short.MAX_VALUE)
-                        .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAddUser)
-                            .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(panelAddUserLayout.createSequentialGroup()
                         .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addContainerGap(42, Short.MAX_VALUE))
+                    .addGroup(panelAddUserLayout.createSequentialGroup()
+                        .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(panelAddUserLayout.createSequentialGroup()
+                                .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING))
+                                    .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
+                                .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelAddUserLayout.createSequentialGroup()
+                                .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(checkBoxTokenizationRights)
+                                    .addComponent(checkBoxGetCardRights))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnAddUser)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         panelAddUserLayout.setVerticalGroup(
             panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -114,21 +128,25 @@ public class ServerFrame extends javax.swing.JFrame {
                 .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(22, 22, 22)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addGap(18, 18, 18)
-                .addComponent(btnAddUser)
+                .addComponent(checkBoxTokenizationRights)
+                .addGap(5, 5, 5)
+                .addGroup(panelAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkBoxGetCardRights)
+                    .addComponent(btnAddUser))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel5)
                 .addGap(5, 5, 5)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tabAddUser.addTab("Add User", panelAddUser);
@@ -154,7 +172,7 @@ public class ServerFrame extends javax.swing.JFrame {
             .addGroup(panelGenerateOutputLayout.createSequentialGroup()
                 .addGap(95, 95, 95)
                 .addComponent(btnGenerateOutput)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
 
         tabAddUser.addTab("Generate Output", panelGenerateOutput);
@@ -203,13 +221,15 @@ public class ServerFrame extends javax.swing.JFrame {
         String name = txtName.getText();
         String userName = txtUsername.getText();
         char[] password = txtPassword.getPassword();
+        boolean hasTokenizationRights = checkBoxTokenizationRights.isSelected();
+        boolean hasGetCardRights = checkBoxGetCardRights.isSelected();
 
         if (userName.matches(RegularExpressions.VALIDATE_USERNAME.toString()) && new String(password).matches(RegularExpressions.VALIDATE_PASSWORD.toString())) {
 
             if (!server.userExists(userName)) {
 
                 try {
-                    Client client = new Client(name, userName, password);
+                    Client client = new Client(name, userName, password, hasTokenizationRights, hasGetCardRights);
                     lblNotifications.setText(ServerNotifications.USER_ADDED.toString());
                     clearUserFields();
                     server.serializeObject(client);
@@ -278,6 +298,8 @@ public class ServerFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnGenerateOutput;
+    private javax.swing.JCheckBox checkBoxGetCardRights;
+    private javax.swing.JCheckBox checkBoxTokenizationRights;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

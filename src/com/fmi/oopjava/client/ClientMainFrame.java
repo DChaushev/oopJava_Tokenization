@@ -298,6 +298,12 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogoutActionPerformed
 
     private void btnGenerateTokenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerateTokenActionPerformed
+        System.out.println(client.hasTokenizationRight());
+        if (!client.hasTokenizationRight()) {
+            lblTokenNotifications.setText(ClientNotifications.NO_RIGHTS.toString());
+            return;
+        }
+
         String cardNumber = txtEnterCard.getText();
         BankCard card = null;
 
@@ -335,6 +341,12 @@ public class ClientMainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGenerateTokenActionPerformed
 
     private void btnGetCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetCardActionPerformed
+
+        if (!client.hasGettingCardRights()) {
+            lblTokenNotifications.setText(ClientNotifications.NO_RIGHTS.toString());
+            return;
+        }
+
         String token = txtEnterToken.getText();
         if (token.matches(RegularExpressions.VALIDATE_TOKEN.toString())) {
             try {
@@ -445,7 +457,7 @@ public class ClientMainFrame extends javax.swing.JFrame {
                 lblLoginNotifications.setText(ClientNotifications.INVALID_CREDENTIALS.toString());
                 return false;
             }
-        }catch(NullPointerException ex){
+        } catch (NullPointerException ex) {
             lblLoginNotifications.setText(ClientNotifications.NO_CONNECTION_TO_SERVER.toString());
             return false;
         }

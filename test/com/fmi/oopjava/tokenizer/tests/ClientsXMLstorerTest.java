@@ -29,7 +29,7 @@ public class ClientsXMLstorerTest {
     @BeforeClass
     public static void setUpClass() {
         storer = new Storer();
-        client = new Client("Dimitar", "mitko", new char[]{'1', '2', '3', '4', 'a', 'a'});
+        client = new Client("Dimitar", "mitko", new char[]{'1', '2', '3', '4', 'a', 'a'}, true, true);
         card = new BankCard("4563960122019991");
         card2 = new BankCard("4563960122019992");
         client.addCard(card.getCardNumber());
